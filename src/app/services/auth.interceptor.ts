@@ -19,7 +19,7 @@ export const authInterceptor: HttpInterceptorFn = (
 
   const token = localStorage.getItem('jwt'); // Get token from local storage
   if (token) {
-    console.log('Adding token to headers: ' + token);
+    console.log('Adding token to headers:', token);
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
@@ -32,9 +32,11 @@ export const authInterceptor: HttpInterceptorFn = (
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      console.log('Interceptor error: ', error);
+      console.error('Interceptor error:', error);
       if (error.status === 401) {
-        console.log('Token is either expired or invalid');
+        console.warn('Token is either expired or invalid');
+        localStorage.removeItem('jwt'); // Remove invalid token
+        authService.authStatusSubject.next(false); // Update auth status
         router.navigate(['/login']);
       }
       return throwError(error);
