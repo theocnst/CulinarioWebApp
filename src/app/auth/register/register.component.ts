@@ -8,7 +8,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
   standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule],
 })
 export class RegisterComponent {
   name: string = '';
@@ -16,7 +16,10 @@ export class RegisterComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   register(): void {
     if (!this.validateEmail(this.email)) {
@@ -35,7 +38,7 @@ export class RegisterComponent {
       },
       error: () => {
         this.errorMessage = 'Registration failed. Please try again.';
-      }
+      },
     });
   }
 

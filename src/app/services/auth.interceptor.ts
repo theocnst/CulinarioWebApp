@@ -1,4 +1,10 @@
-import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpInterceptorFn,
+  HttpRequest,
+  HttpHandlerFn,
+  HttpEvent,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
@@ -6,7 +12,7 @@ import { Router } from '@angular/router';
 
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
-  next: HttpHandlerFn
+  next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> => {
   const authService = inject(AuthService);
   const router = inject(Router);
@@ -16,9 +22,9 @@ export const authInterceptor: HttpInterceptorFn = (
     console.log('Adding token to headers: ' + token);
     req = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      withCredentials: true // Ensure credentials are sent with the request
+      withCredentials: true, // Ensure credentials are sent with the request
     });
   } else {
     console.log('No token found in local storage');
@@ -32,6 +38,6 @@ export const authInterceptor: HttpInterceptorFn = (
         router.navigate(['/login']);
       }
       return throwError(error);
-    })
+    }),
   );
 };

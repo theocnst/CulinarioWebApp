@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -9,14 +8,17 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule],
 })
 export class LoginComponent {
   email: string = '';
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   login(): void {
     if (!this.validateEmail(this.email)) {
@@ -35,7 +37,7 @@ export class LoginComponent {
       },
       error: () => {
         this.errorMessage = 'Login failed. Please try again.';
-      }
+      },
     });
   }
 
