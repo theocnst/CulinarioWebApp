@@ -17,14 +17,16 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
+    // Check initial authentication status only once
     this.authService.isAuthenticated().subscribe((isAuth) => {
       console.log('Initial authentication status:', isAuth);
       this.isAuthenticated = isAuth;
     });
 
-    this.authService.authStatus.subscribe((status) => {
-      console.log('Authentication status changed:', status);
-      this.isAuthenticated = status;
+    // Subscribe to authStatus to handle further changes
+    this.authService.authStatus.subscribe((isAuth) => {
+      console.log('Authentication status changed:', isAuth);
+      this.isAuthenticated = isAuth;
     });
   }
 }

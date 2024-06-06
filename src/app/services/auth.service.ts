@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 
 interface AuthResponse {
@@ -14,14 +14,17 @@ interface AuthResponse {
 })
 export class AuthService {
   private apiUrl = 'https://localhost:7053/api/Users';
-  authStatusSubject = new Subject<boolean>();
-
+  private authStatusSubject = new BehaviorSubject<boolean>(this.hasToken());
   authStatus = this.authStatusSubject.asObservable();
 
   constructor(
     private http: HttpClient,
     private router: Router,
   ) {}
+
+  private hasToken(): boolean {
+    return !!localStorage.getItem('jwt');
+  }
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http
@@ -35,7 +38,7 @@ export class AuthService {
           console.log('Login response:', response.message);
           localStorage.setItem('jwt', response.token); // Store token in local storage
           console.log('JWT token stored:', response.token);
-          this.authStatusSubject.next(true); // Update auth status
+          this.updateAuthStatus(true); // Update auth status
           this.router.navigate(['/home']);
         }),
       );
@@ -57,7 +60,7 @@ export class AuthService {
           console.log('Register response:', response.message);
           localStorage.setItem('jwt', response.token); // Store token in local storage
           console.log('JWT token stored:', response.token);
-          this.authStatusSubject.next(true); // Update auth status
+          this.updateAuthStatus(true); // Update auth status
           this.router.navigate(['/home']);
         }),
       );
@@ -70,7 +73,7 @@ export class AuthService {
         console.log('Logged out successfully');
         localStorage.removeItem('jwt'); // Remove token from local storage
         console.log('JWT token removed');
-        this.authStatusSubject.next(false); // Update auth status
+        this.updateAuthStatus(false); // Update auth status
         this.router.navigate(['/login']);
       });
   }
@@ -79,22 +82,30 @@ export class AuthService {
     const token = localStorage.getItem('jwt');
     if (!token) {
       console.log('No token found, user is not authenticated');
-      this.authStatusSubject.next(false);
+      this.updateAuthStatus(false);
       return of(false);
     }
 
     return this.http
-      .get<boolean>(`${this.apiUrl}/authenticated`, { withCredentials: true })
+      .get<any>(`${this.apiUrl}/authenticated`, { withCredentials: true })
       .pipe(
         tap((response) => {
           console.log('Is authenticated response:', response);
-          this.authStatusSubject.next(response); // Update auth status
+          const isAuthenticated = response.message === 'Token is valid';
+          this.updateAuthStatus(isAuthenticated);
         }),
         catchError((error) => {
           console.error('Error checking authentication', error);
-          this.authStatusSubject.next(false); // Update auth status
+          this.updateAuthStatus(false);
           return of(false);
         }),
       );
+  }
+
+  updateAuthStatus(status: boolean): void {
+    // Only update if the status has changed
+    if (this.authStatusSubject.value !== status) {
+      this.authStatusSubject.next(status);
+    }
   }
 }

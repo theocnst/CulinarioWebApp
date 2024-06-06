@@ -19,7 +19,7 @@ export const authInterceptor: HttpInterceptorFn = (
 
   const token = localStorage.getItem('jwt'); // Get token from local storage
   if (token) {
-    console.log('Adding token to headers:', token);
+    console.debug('Adding token to headers:', token);
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
@@ -27,19 +27,30 @@ export const authInterceptor: HttpInterceptorFn = (
       withCredentials: true, // Ensure credentials are sent with the request
     });
   } else {
-    console.log('No token found in local storage');
+    console.debug('No token found in local storage');
   }
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      console.error('Interceptor error:', error);
-      if (error.status === 401) {
-        console.warn('Token is either expired or invalid');
-        localStorage.removeItem('jwt'); // Remove invalid token
-        authService.authStatusSubject.next(false); // Update auth status
-        router.navigate(['/login']);
-      }
+      handleError(error, authService, router);
       return throwError(error);
     }),
   );
 };
+
+function handleError(
+  error: HttpErrorResponse,
+  authService: AuthService,
+  router: Router,
+) {
+  console.error('HTTP Interceptor error:', error);
+
+  if (error.status === 401) {
+    console.warn('Token is either expired or invalid');
+    localStorage.removeItem('jwt'); // Remove invalid token
+    authService.updateAuthStatus(false); // Update auth status
+    router.navigate(['/login']);
+  } else {
+    console.error('An unexpected error occurred:', error.message);
+  }
+}
