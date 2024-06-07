@@ -13,7 +13,7 @@ interface AuthResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:7053/api/Users';
+  private apiUrl = 'https://localhost:7053/api/UserCredentials';
   private authStatusSubject = new BehaviorSubject<boolean>(this.hasToken());
   authStatus = this.authStatusSubject.asObservable();
 
@@ -45,14 +45,14 @@ export class AuthService {
   }
 
   register(
-    name: string,
+    username: string,
     email: string,
     password: string,
   ): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(
         `${this.apiUrl}/register`,
-        { name, email, password },
+        { username, email, password },
         { withCredentials: true },
       )
       .pipe(
