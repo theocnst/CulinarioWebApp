@@ -50,6 +50,11 @@ function handleError(
     localStorage.removeItem('jwt'); // Remove invalid token
     authService.updateAuthStatus(false); // Update auth status
     router.navigate(['/login']);
+  } else if (error.status === 0) {
+    console.error('Server is unreachable:', error.message);
+    localStorage.removeItem('jwt');
+    authService.updateAuthStatus(false); // Update auth status on server error
+    router.navigate(['/login']);
   } else {
     console.error('An unexpected error occurred:', error.message);
   }
