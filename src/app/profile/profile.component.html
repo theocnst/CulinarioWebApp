@@ -1,1 +1,27 @@
-<p>profile works!</p>
+@if (userInfo) {
+  <div>
+    <h2>{{ userInfo.username }}'s Profile</h2>
+    <img src="{{ userInfo.profilePicture }}" alt="Profile Picture" />
+    <p>First Name: {{ userInfo.firstName }}</p>
+    <p>Last Name: {{ userInfo.lastName }}</p>
+    <p>Description: {{ userInfo.description }}</p>
+    <p>Date of Birth: {{ userInfo.dateOfBirth }}</p>
+    <h3>Friends</h3>
+    <ul>
+      @for (friend of userInfo.friends; track friend) {
+        <li>{{ friend.username }}</li>
+      }
+    </ul>
+    <h3>Liked Recipes</h3>
+    <ul>
+      @for (recipe of userInfo.likedRecipes; track recipe) {
+        <li>{{ recipe.name }}</li>
+      }
+    </ul>
+  </div>
+}
+@if (!userInfo) {
+  <div>
+    <p>Loading profile...</p>
+  </div>
+}

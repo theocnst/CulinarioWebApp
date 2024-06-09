@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { jwtDecode } from 'jwt-decode';
 
 interface AuthResponse {
   token: string;
@@ -36,8 +37,15 @@ export class AuthService {
       .pipe(
         tap((response) => {
           console.log('Login response:', response.message);
+
           localStorage.setItem('jwt', response.token); // Store token in local storage
           console.log('JWT token stored:', response.token);
+
+          const decodedToken: any = jwtDecode(response.token);
+          const username = decodedToken.username; // Extract username from token
+          localStorage.setItem('username', username); // Store username
+          console.log('Username stored:', username);
+
           this.updateAuthStatus(true); // Update auth status
           this.router.navigate(['/home']);
         }),
@@ -107,5 +115,9 @@ export class AuthService {
     if (this.authStatusSubject.value !== status) {
       this.authStatusSubject.next(status);
     }
+  }
+
+  getCurrentUsername(): string | null {
+    return localStorage.getItem('username');
   }
 }

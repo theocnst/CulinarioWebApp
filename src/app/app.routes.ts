@@ -6,6 +6,8 @@ import { authGuard } from './services/auth.guard';
 import { noAuthGuard } from './services/no-auth.guard';
 import { ProfileComponent } from './profile/profile.component';
 import { AllRecipesComponent } from './all-recipes/all-recipes.component';
+import { RecipeComponent } from './recipe/recipe.component';
+import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [noAuthGuard] },
@@ -15,10 +17,24 @@ export const routes: Routes = [
     canActivate: [noAuthGuard],
   },
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
+  {
+    path: 'profile/:username',
+    component: ProfileComponent,
+    canActivate: [authGuard],
+  },
   {
     path: 'all-recipes',
     component: AllRecipesComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'recipe/:id',
+    component: RecipeComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'recipe-form',
+    component: RecipeFormComponent,
     canActivate: [authGuard],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },

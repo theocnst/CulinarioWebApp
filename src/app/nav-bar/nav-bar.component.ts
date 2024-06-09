@@ -55,8 +55,12 @@ export class NavBarComponent {
   }
 
   onProfileClick(): void {
-    console.log('Navigating to profile');
-    this.router.navigate(['/profile']);
+    const username = this.authService.getCurrentUsername();
+    if (username) {
+      this.router.navigate([`/profile/${username}`]);
+    } else {
+      console.error('No username found in local storage');
+    }
   }
 
   onLogoutClick(): void {
