@@ -1,42 +1,70 @@
 @if (recipe) {
-  <div>
-    <h1>{{ recipe.name }}</h1>
-    <img [src]="recipe.image" alt="no image found " />
-    <p>{{ recipe.description }}</p>
-    <p><strong>Prep Time:</strong> {{ recipe.prepTime }} minutes</p>
-    <p><strong>Cook Time:</strong> {{ recipe.cookTime }} minutes</p>
-    <p><strong>Total Time:</strong> {{ recipe.totalTime }} minutes</p>
-    <p><strong>Servings:</strong> {{ recipe.servings }}</p>
-    <p><strong>Country:</strong> {{ recipe.countryName }}</p>
-    <p><strong>Type:</strong> {{ recipe.recipeType.name }}</p>
-    <h2>Ingredients</h2>
-    <ul>
-      @for (ingredient of recipe.ingredients; track ingredient) {
-        <li>
-          {{ ingredient.quantity }} {{ ingredient.unit }}
-          {{ ingredient.name }}
-        </li>
-      }
-    </ul>
-    <h2>Instructions</h2>
-    <ol>
-      @for (instruction of recipe.instructions; track instruction) {
-        <li>{{ instruction.stepNumber }}. {{ instruction.description }}</li>
-      }
-    </ol>
-    <h2>Nutrition Info</h2>
-    <ul>
-      <li>Calories: {{ recipe.nutritionInfo.calories }}</li>
-      <li>Fats: {{ recipe.nutritionInfo.fats }} g</li>
-      <li>Carbs: {{ recipe.nutritionInfo.carbs }} g</li>
-      <li>Protein: {{ recipe.nutritionInfo.protein }} g</li>
-      <li>Fiber: {{ recipe.nutritionInfo.fiber }} g</li>
-      <li>Sugar: {{ recipe.nutritionInfo.sugar }} g</li>
-    </ul>
+  <div
+    class="mx-auto my-10 max-w-3xl overflow-hidden rounded-lg bg-white shadow-md"
+  >
+    <div class="p-6 text-center">
+      <img
+        [src]="recipe.image"
+        alt="No image found"
+        class="mx-auto mb-4 h-40 w-40 rounded-full object-cover"
+      />
+      <h1 class="mb-2 text-3xl font-bold">{{ recipe.name }}</h1>
+      <p class="mb-4 text-gray-600">{{ recipe.description }}</p>
+    </div>
+    <div class="flex justify-around bg-gray-100 p-4">
+      <p><strong>Prep Time:</strong> {{ recipe.prepTime }} minutes</p>
+      <p><strong>Cook Time:</strong> {{ recipe.cookTime }} minutes</p>
+      <p><strong>Total Time:</strong> {{ recipe.totalTime }} minutes</p>
+    </div>
+    <div class="flex justify-around bg-gray-100 p-4">
+      <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+      <p><strong>Country:</strong> {{ recipe.countryName }}</p>
+      <p><strong>Type:</strong> {{ recipe.recipeType.name }}</p>
+    </div>
+    <div class="p-4">
+      <h2 class="mb-2 text-center text-xl font-semibold">Ingredients</h2>
+      <ul class="list-inside list-disc">
+        @for (ingredient of recipe.ingredients; track ingredient) {
+          <li>
+            {{ ingredient.quantity }} {{ ingredient.unit }}
+            {{ ingredient.name }}
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="p-4">
+      <h2 class="mb-2 text-center text-xl font-semibold">Instructions</h2>
+      <div class="space-y-2">
+        @for (instruction of recipe.instructions; track instruction) {
+          <div>
+            <p>
+              <strong>{{ instruction.stepNumber }}.</strong>
+              {{ instruction.description }}
+            </p>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="bg-gray-100 p-4">
+      <h2 class="mb-2 text-center text-xl font-semibold">Nutrition Info</h2>
+      <ul class="space-y-1">
+        <li><strong>Calories:</strong> {{ recipe.nutritionInfo.calories }}</li>
+        <li><strong>Fats:</strong> {{ recipe.nutritionInfo.fats }} g</li>
+        <li><strong>Carbs:</strong> {{ recipe.nutritionInfo.carbs }} g</li>
+        <li><strong>Protein:</strong> {{ recipe.nutritionInfo.protein }} g</li>
+        <li><strong>Fiber:</strong> {{ recipe.nutritionInfo.fiber }} g</li>
+        <li><strong>Sugar:</strong> {{ recipe.nutritionInfo.sugar }} g</li>
+      </ul>
+    </div>
   </div>
 }
+
 @if (!recipe) {
-  <div>
-    <p>Loading recipe...</p>
+  <div
+    class="mx-auto my-10 max-w-3xl overflow-hidden rounded-lg bg-white shadow-md"
+  >
+    <div class="p-4 text-center">
+      <p>Loading recipe...</p>
+    </div>
   </div>
 }

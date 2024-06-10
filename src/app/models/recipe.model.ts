@@ -23,7 +23,7 @@ export interface RecipeType {
 }
 
 export interface Country {
-  name: string;
+  countryName: string;
 }
 
 export interface Recipe {

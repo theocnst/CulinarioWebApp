@@ -1,27 +1,59 @@
-@if (userInfo) {
-  <div>
-    <h2>{{ userInfo.username }}'s Profile</h2>
-    <img src="{{ userInfo.profilePicture }}" alt="Profile Picture" />
-    <p>First Name: {{ userInfo.firstName }}</p>
-    <p>Last Name: {{ userInfo.lastName }}</p>
-    <p>Description: {{ userInfo.description }}</p>
-    <p>Date of Birth: {{ userInfo.dateOfBirth }}</p>
-    <h3>Friends</h3>
-    <ul>
-      @for (friend of userInfo.friends; track friend) {
-        <li>{{ friend.username }}</li>
-      }
-    </ul>
-    <h3>Liked Recipes</h3>
-    <ul>
-      @for (recipe of userInfo.likedRecipes; track recipe) {
-        <li>{{ recipe.name }}</li>
-      }
-    </ul>
-  </div>
-}
-@if (!userInfo) {
-  <div>
-    <p>Loading profile...</p>
-  </div>
-}
+<div
+  class="mx-auto max-w-2xl overflow-hidden rounded-lg bg-white p-6 shadow-lg"
+>
+  @if (userInfo) {
+    <div class="text-center">
+      <div class="relative inline-block">
+        <img
+          src="{{ userInfo.profilePicture }}"
+          alt="Profile Picture"
+          class="mx-auto mb-4 h-32 w-32 rounded-full border-4 border-indigo-500"
+        />
+      </div>
+      <h2 class="mb-4 text-3xl font-extrabold text-indigo-600">
+        {{ userInfo.username }}'s Profile
+      </h2>
+      <div class="px-6 text-left">
+        <p class="mb-2 text-lg">
+          <span class="font-semibold text-gray-700">First Name:</span>
+          {{ userInfo.firstName }}
+        </p>
+        <p class="mb-2 text-lg">
+          <span class="font-semibold text-gray-700">Last Name:</span>
+          {{ userInfo.lastName }}
+        </p>
+        <p class="mb-2 text-lg">
+          <span class="font-semibold text-gray-700">Description:</span>
+          {{ userInfo.description }}
+        </p>
+        <p class="mb-2 text-lg">
+          <span class="font-semibold text-gray-700">Date of Birth:</span>
+          {{ userInfo.dateOfBirth }}
+        </p>
+      </div>
+      <div class="mt-6 px-6 text-left">
+        <h3 class="mb-2 text-2xl font-semibold text-indigo-600">Friends</h3>
+        <ul class="list-inside list-disc text-gray-800">
+          @for (friend of userInfo.friends; track friend) {
+            <li class="text-lg">{{ friend.username }}</li>
+          }
+        </ul>
+      </div>
+      <div class="mt-6 px-6 text-left">
+        <h3 class="mb-2 text-2xl font-semibold text-indigo-600">
+          Liked Recipes
+        </h3>
+        <ul class="list-inside list-disc text-gray-800">
+          @for (recipe of userInfo.likedRecipes; track recipe) {
+            <li class="text-lg">{{ recipe.name }}</li>
+          }
+        </ul>
+      </div>
+    </div>
+  }
+  @if (!userInfo) {
+    <div class="text-center">
+      <p class="text-lg text-gray-600">Loading profile...</p>
+    </div>
+  }
+</div>

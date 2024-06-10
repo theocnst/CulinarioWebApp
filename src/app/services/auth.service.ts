@@ -120,4 +120,20 @@ export class AuthService {
   getCurrentUsername(): string | null {
     return localStorage.getItem('username');
   }
+
+  isAdmin(): boolean {
+    const token = localStorage.getItem('jwt');
+    if (!token) {
+      console.log('isAdmin: No token found in local storage');
+      return false;
+    }
+
+    console.log('isAdmin: Token found, decoding token');
+    const decodedToken: any = jwtDecode(token);
+    console.log('Decoded token:', decodedToken);
+
+    const isAdmin = decodedToken?.role === 'Admin';
+    console.log(`isAdmin: User has admin role: ${isAdmin}`);
+    return isAdmin;
+  }
 }

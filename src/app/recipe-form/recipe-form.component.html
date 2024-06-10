@@ -1,102 +1,316 @@
-<!-- src/app/recipe-form/recipe-form.component.html -->
-<div class="container mx-auto p-4">
-  <h2 class="mb-4 text-2xl">Create a New Recipe</h2>
-  <form (ngSubmit)="onSubmit()">
-    <div class="mb-4">
-      <label class="mb-2 block text-sm font-medium">Name</label>
-      <input
-        class="w-full rounded border p-2"
-        [(ngModel)]="recipe.name"
-        name="name"
-        required
-      />
+<div class="min-h-screen bg-gray-100 p-4 sm:p-12">
+  <div
+    class="mx-auto max-w-lg border-0 bg-white px-6 py-12 shadow-lg sm:rounded-3xl"
+  >
+    <div class="container mx-auto p-4">
+      <h2 class="mb-4 text-2xl">Create a New Recipe</h2>
+      <form (ngSubmit)="onSubmit()">
+        <!-- Step 1: Basic Info -->
+        @if (currentStep === 1) {
+          <div>
+            <div class="mb-4">
+              <label class="mb-2 block text-sm font-medium">Name</label>
+              <input
+                class="w-full rounded border p-2"
+                [(ngModel)]="recipe.name"
+                name="name"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label class="mb-2 block text-sm font-medium">Image URL</label>
+              <input
+                class="w-full rounded border p-2"
+                [(ngModel)]="recipe.image"
+                name="image"
+                required
+              />
+            </div>
+            <div class="flex space-x-4">
+              <div class="mb-4 w-1/4">
+                <label class="mb-2 block text-sm font-medium"
+                  >Prep Time (minutes)</label
+                >
+                <input
+                  class="w-full rounded border p-2"
+                  type="number"
+                  [(ngModel)]="recipe.prepTime"
+                  name="prepTime"
+                  required
+                />
+              </div>
+              <div class="mb-4 w-1/4">
+                <label class="mb-2 block text-sm font-medium"
+                  >Cook Time (minutes)</label
+                >
+                <input
+                  class="w-full rounded border p-2"
+                  type="number"
+                  [(ngModel)]="recipe.cookTime"
+                  name="cookTime"
+                  required
+                />
+              </div>
+              <div class="mb-4 w-1/4">
+                <label class="mb-2 block text-sm font-medium"
+                  >Total Time (minutes)</label
+                >
+                <input
+                  class="w-full rounded border p-2"
+                  type="number"
+                  [(ngModel)]="recipe.totalTime"
+                  name="totalTime"
+                  required
+                />
+              </div>
+              <div class="mb-4 w-1/4">
+                <label class="mb-2 block text-sm font-medium">Servings</label>
+                <input
+                  class="w-full rounded border p-2"
+                  type="number"
+                  [(ngModel)]="recipe.servings"
+                  name="servings"
+                  required
+                />
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="mb-2 block text-sm font-medium">Description</label>
+              <textarea
+                class="w-full rounded border p-2"
+                [(ngModel)]="recipe.description"
+                name="description"
+                required
+              ></textarea>
+            </div>
+            <div class="mb-4">
+              <label class="mb-2 block text-sm font-medium">Country</label>
+              <select
+                class="w-full rounded border p-2"
+                [(ngModel)]="recipe.countryName"
+                name="countryName"
+                required
+              >
+                @for (country of countries; track country) {
+                  <option [value]="country.countryName">
+                    {{ country.countryName }}
+                  </option>
+                }
+              </select>
+            </div>
+            <div class="mb-4">
+              <label class="mb-2 block text-sm font-medium">Recipe Type</label>
+              <select
+                class="w-full rounded border p-2"
+                [(ngModel)]="recipe.recipeType.name"
+                name="recipeType"
+                required
+              >
+                @for (type of recipeTypes; track type) {
+                  <option [value]="type.name">
+                    {{ type.name }}
+                  </option>
+                }
+              </select>
+            </div>
+          </div>
+        }
+
+        <!-- Step 2: Ingredients -->
+        @if (currentStep === 2) {
+          <div>
+            <div class="mb-4">
+              <label class="mb-2 block text-sm font-medium">Ingredients</label>
+              @for (
+                ingredient of recipe.ingredients;
+                track ingredient;
+                let i = $index
+              ) {
+                <div>
+                  <input
+                    class="mb-2 w-full rounded border p-2"
+                    placeholder="Name"
+                    [(ngModel)]="recipe.ingredients[i].name"
+                    name="ingredientName{{ i }}"
+                    required
+                  />
+                  <input
+                    class="mb-2 w-full rounded border p-2"
+                    placeholder="Quantity"
+                    type="number"
+                    [(ngModel)]="recipe.ingredients[i].quantity"
+                    name="ingredientQuantity{{ i }}"
+                    required
+                  />
+                  <input
+                    class="mb-2 w-full rounded border p-2"
+                    placeholder="Unit"
+                    [(ngModel)]="recipe.ingredients[i].unit"
+                    name="ingredientUnit{{ i }}"
+                    required
+                  />
+                </div>
+              }
+              <button
+                type="button"
+                class="w-full rounded bg-blue-500 px-4 py-2 text-white"
+                (click)="
+                  recipe.ingredients.push({ name: '', quantity: 0, unit: '' })
+                "
+              >
+                Add Ingredient
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- Step 3: Instructions -->
+        @if (currentStep === 3) {
+          <div>
+            <div class="mb-4">
+              <label class="mb-2 block text-sm font-medium">Instructions</label>
+              @for (
+                instruction of recipe.instructions;
+                track instruction;
+                let i = $index
+              ) {
+                <div>
+                  <input
+                    class="mb-2 w-full rounded border p-2"
+                    placeholder="Step Number"
+                    type="number"
+                    [(ngModel)]="recipe.instructions[i].stepNumber"
+                    name="instructionStepNumber{{ i }}"
+                    required
+                  />
+                  <textarea
+                    class="mb-2 w-full rounded border p-2"
+                    placeholder="Description"
+                    [(ngModel)]="recipe.instructions[i].description"
+                    name="instructionDescription{{ i }}"
+                    required
+                  ></textarea>
+                </div>
+              }
+              <button
+                type="button"
+                class="w-full rounded bg-blue-500 px-4 py-2 text-white"
+                (click)="
+                  recipe.instructions.push({ stepNumber: 0, description: '' })
+                "
+              >
+                Add Instruction
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- Step 4: Nutrition Info -->
+        @if (currentStep === 4) {
+          <div>
+            <div class="mb-4">
+              <label class="mb-2 block text-sm font-medium"
+                >Nutrition Info</label
+              >
+              <div class="mb-4">
+                <label class="mb-2 block text-sm font-medium">Calories</label>
+                <input
+                  class="mb-2 w-full rounded border p-2"
+                  placeholder="Calories"
+                  type="number"
+                  [(ngModel)]="recipe.nutritionInfo.calories"
+                  name="calories"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label class="mb-2 block text-sm font-medium">Fats</label>
+                <input
+                  class="mb-2 w-full rounded border p-2"
+                  placeholder="Fats"
+                  type="number"
+                  [(ngModel)]="recipe.nutritionInfo.fats"
+                  name="fats"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label class="mb-2 block text-sm font-medium">Carbs</label>
+                <input
+                  class="mb-2 w-full rounded border p-2"
+                  placeholder="Carbs"
+                  type="number"
+                  [(ngModel)]="recipe.nutritionInfo.carbs"
+                  name="carbs"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label class="mb-2 block text-sm font-medium">Protein</label>
+                <input
+                  class="mb-2 w-full rounded border p-2"
+                  placeholder="Protein"
+                  type="number"
+                  [(ngModel)]="recipe.nutritionInfo.protein"
+                  name="protein"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label class="mb-2 block text-sm font-medium">Fiber</label>
+                <input
+                  class="mb-2 w-full rounded border p-2"
+                  placeholder="Fiber"
+                  type="number"
+                  [(ngModel)]="recipe.nutritionInfo.fiber"
+                  name="fiber"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label class="mb-2 block text-sm font-medium">Sugar</label>
+                <input
+                  class="mb-2 w-full rounded border p-2"
+                  placeholder="Sugar"
+                  type="number"
+                  [(ngModel)]="recipe.nutritionInfo.sugar"
+                  name="sugar"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between">
+          <button
+            type="button"
+            class="rounded bg-gray-500 px-4 py-2 text-white"
+            (click)="prevStep()"
+            [disabled]="currentStep === 1"
+          >
+            Back
+          </button>
+          @if (currentStep < 4) {
+            <button
+              type="button"
+              class="rounded bg-blue-500 px-4 py-2 text-white"
+              (click)="nextStep()"
+            >
+              Next
+            </button>
+          }
+          @if (currentStep === 4) {
+            <button
+              type="submit"
+              class="rounded bg-green-500 px-4 py-2 text-white"
+            >
+              Submit
+            </button>
+          }
+        </div>
+      </form>
     </div>
-    <div class="mb-4">
-      <label class="mb-2 block text-sm font-medium">Image URL</label>
-      <input
-        class="w-full rounded border p-2"
-        [(ngModel)]="recipe.image"
-        name="image"
-        required
-      />
-    </div>
-    <div class="mb-4">
-      <label class="mb-2 block text-sm font-medium">Prep Time (minutes)</label>
-      <input
-        class="w-full rounded border p-2"
-        type="number"
-        [(ngModel)]="recipe.prepTime"
-        name="prepTime"
-        required
-      />
-    </div>
-    <div class="mb-4">
-      <label class="mb-2 block text-sm font-medium">Cook Time (minutes)</label>
-      <input
-        class="w-full rounded border p-2"
-        type="number"
-        [(ngModel)]="recipe.cookTime"
-        name="cookTime"
-        required
-      />
-    </div>
-    <div class="mb-4">
-      <label class="mb-2 block text-sm font-medium">Total Time (minutes)</label>
-      <input
-        class="w-full rounded border p-2"
-        type="number"
-        [(ngModel)]="recipe.totalTime"
-        name="totalTime"
-        required
-      />
-    </div>
-    <div class="mb-4">
-      <label class="mb-2 block text-sm font-medium">Servings</label>
-      <input
-        class="w-full rounded border p-2"
-        type="number"
-        [(ngModel)]="recipe.servings"
-        name="servings"
-        required
-      />
-    </div>
-    <div class="mb-4">
-      <label class="mb-2 block text-sm font-medium">Description</label>
-      <textarea
-        class="w-full rounded border p-2"
-        [(ngModel)]="recipe.description"
-        name="description"
-        required
-      ></textarea>
-    </div>
-    <div class="mb-4">
-      <label class="mb-2 block text-sm font-medium">Country</label>
-      <select
-        class="w-full rounded border p-2"
-        [(ngModel)]="recipe.countryName"
-        name="countryName"
-        required
-      >
-        <option *ngFor="let country of countries" [value]="country.name">
-          {{ country.name }}
-        </option>
-      </select>
-    </div>
-    <div class="mb-4">
-      <label class="mb-2 block text-sm font-medium">Recipe Type</label>
-      <select
-        class="w-full rounded border p-2"
-        [(ngModel)]="recipe.recipeType"
-        name="recipeType"
-        required
-      >
-        <option *ngFor="let type of recipeTypes" [value]="type.name">
-          {{ type.name }}
-        </option>
-      </select>
-    </div>
-    <button class="rounded bg-blue-500 px-4 py-2 text-white" type="submit">
-      Submit
-    </button>
-  </form>
+  </div>
 </div>

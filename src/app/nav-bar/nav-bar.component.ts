@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service'; // Ensure the path is correct
 
@@ -8,14 +8,19 @@ import { AuthService } from '../services/auth.service'; // Ensure the path is co
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css'],
 })
-export class NavBarComponent {
+export class NavBarComponent implements OnInit {
   isMobileMenuOpen = false;
   isProfileDropdownOpen = false;
+  isAdmin = false;
 
   constructor(
     private router: Router,
     private authService: AuthService,
   ) {}
+
+  ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
+  }
 
   toggleMobileMenu(event: MouseEvent): void {
     console.log('Toggling mobile menu');
@@ -52,6 +57,11 @@ export class NavBarComponent {
   onAllRecipesClick(): void {
     console.log('Navigating to all recipes');
     this.router.navigate(['/all-recipes']);
+  }
+
+  onAddRecipeClick(): void {
+    console.log('Navigating to add recipe');
+    this.router.navigate(['/recipe-form']);
   }
 
   onProfileClick(): void {

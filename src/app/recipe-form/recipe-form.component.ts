@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe, RecipeType, Country } from '../models/recipe.model';
 import { RecipeService } from '../services/recipe.service';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-recipe-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [FormsModule],
   templateUrl: './recipe-form.component.html',
   styleUrls: ['./recipe-form.component.css'],
 })
@@ -37,8 +37,12 @@ export class RecipeFormComponent implements OnInit {
   };
   recipeTypes: RecipeType[] = [];
   countries: Country[] = [];
+  currentStep: number = 1;
 
-  constructor(private recipeService: RecipeService) {}
+  constructor(
+    private recipeService: RecipeService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.fetchRecipeTypes();
@@ -67,11 +71,25 @@ export class RecipeFormComponent implements OnInit {
     );
   }
 
+  nextStep(): void {
+    if (this.currentStep < 4) {
+      this.currentStep++;
+    }
+  }
+
+  prevStep(): void {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
+
   onSubmit(): void {
+    console.log('Recipe:', this.recipe);
     this.recipeService.addRecipe(this.recipe).subscribe(
       (data: Recipe) => {
         console.log('Recipe added successfully:', data);
-        // Redirect or show success message
+        // change router to navigate to the recipe details page
+        this.router.navigate([`/home`]);
       },
       (error) => {
         console.error('Error adding recipe:', error);
