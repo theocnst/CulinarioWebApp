@@ -1,0 +1,23 @@
+<div
+  class="max-w-xs cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-xl"
+  (click)="navigateToRecipe()"
+>
+  <div class="flex h-96 items-center justify-center bg-white p-4">
+    @if (recipe.image) {
+      <img
+        class="max-h-full max-w-full rounded-lg"
+        [src]="recipe.image"
+        alt="Recipe Image"
+      />
+    } @else {
+      <img
+        class="max-h-full max-w-full rounded-lg"
+        src="https://cdn-icons-png.flaticon.com/512/2046/2046670.png"
+        alt="Placeholder Image"
+      />
+    }
+  </div>
+  <div class="px-6 py-4">
+    <div class="mb-2 text-xl font-bold text-gray-800">{{ recipe.name }}</div>
+  </div>
+</div>

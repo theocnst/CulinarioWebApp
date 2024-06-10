@@ -54,9 +54,9 @@ export class NavBarComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  onAllRecipesClick(): void {
-    console.log('Navigating to all recipes');
-    this.router.navigate(['/all-recipes']);
+  onRecipeListClick(): void {
+    console.log('Navigating to recipe list');
+    this.router.navigate(['/recipe-list']);
   }
 
   onAddRecipeClick(): void {

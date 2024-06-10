@@ -5,10 +5,10 @@ import { HomeComponent } from './home/home.component';
 import { authGuard } from './services/auth.guard';
 import { noAuthGuard } from './services/no-auth.guard';
 import { ProfileComponent } from './profile/profile.component';
-import { AllRecipesComponent } from './all-recipes/all-recipes.component';
 import { RecipeComponent } from './recipe/recipe.component';
 import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 import { adminGuard } from './services/admin.guard';
+import { RecipeListComponent } from './recipe-list/recipe-list.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [noAuthGuard] },
@@ -24,8 +24,8 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'all-recipes',
-    component: AllRecipesComponent,
+    path: 'recipe-list',
+    component: RecipeListComponent,
     canActivate: [authGuard],
   },
   {
