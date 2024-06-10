@@ -8,23 +8,33 @@
         <!-- Step 1: Basic Info -->
         @if (currentStep === 1) {
           <div>
-            <div class="mb-4">
-              <label class="mb-2 block text-sm font-medium">Name</label>
+            <div class="relative z-0 mb-4 w-full">
               <input
-                class="w-full rounded border p-2"
-                [(ngModel)]="recipe.name"
+                type="text"
                 name="name"
+                placeholder=" "
                 required
+                class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                [(ngModel)]="recipe.name"
               />
+              <label
+                class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                >Name</label
+              >
             </div>
-            <div class="mb-4">
-              <label class="mb-2 block text-sm font-medium">Image URL</label>
+            <div class="relative z-0 mb-4 w-full">
               <input
-                class="w-full rounded border p-2"
-                [(ngModel)]="recipe.image"
+                type="text"
                 name="image"
+                placeholder=" "
                 required
+                class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                [(ngModel)]="recipe.image"
               />
+              <label
+                class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                >Image URL</label
+              >
             </div>
             <div class="flex space-x-4">
               <div class="mb-4 w-1/4">
@@ -74,44 +84,57 @@
                 />
               </div>
             </div>
-            <div class="mb-4">
-              <label class="mb-2 block text-sm font-medium">Description</label>
+
+            <div class="relative z-0 mb-4 w-full">
               <textarea
-                class="w-full rounded border p-2"
-                [(ngModel)]="recipe.description"
                 name="description"
+                placeholder=" "
                 required
+                class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                [(ngModel)]="recipe.description"
               ></textarea>
-            </div>
-            <div class="mb-4">
-              <label class="mb-2 block text-sm font-medium">Country</label>
-              <select
-                class="w-full rounded border p-2"
-                [(ngModel)]="recipe.countryName"
-                name="countryName"
-                required
+              <label
+                class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                >Description</label
               >
+            </div>
+            <div class="relative z-0 mb-4 w-full">
+              <select
+                name="countryName"
+                placeholder=" "
+                required
+                class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                [(ngModel)]="recipe.countryName"
+              >
+                <option value="" selected disabled hidden></option>
                 @for (country of countries; track country) {
                   <option [value]="country.countryName">
                     {{ country.countryName }}
                   </option>
                 }
               </select>
-            </div>
-            <div class="mb-4">
-              <label class="mb-2 block text-sm font-medium">Recipe Type</label>
-              <select
-                class="w-full rounded border p-2"
-                [(ngModel)]="recipe.recipeType.name"
-                name="recipeType"
-                required
+              <label
+                class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                >Country</label
               >
+            </div>
+            <div class="relative z-0 mb-4 w-full">
+              <select
+                name="recipeType"
+                placeholder=" "
+                required
+                class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                [(ngModel)]="recipe.recipeType.name"
+              >
+                <option value="" selected disabled hidden></option>
                 @for (type of recipeTypes; track type) {
-                  <option [value]="type.name">
-                    {{ type.name }}
-                  </option>
+                  <option [value]="type.name">{{ type.name }}</option>
                 }
               </select>
+              <label
+                class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                >Recipe Type</label
+              >
             </div>
           </div>
         }
@@ -127,28 +150,48 @@
                 let i = $index
               ) {
                 <div>
-                  <input
-                    class="mb-2 w-full rounded border p-2"
-                    placeholder="Name"
-                    [(ngModel)]="recipe.ingredients[i].name"
-                    name="ingredientName{{ i }}"
-                    required
-                  />
-                  <input
-                    class="mb-2 w-full rounded border p-2"
-                    placeholder="Quantity"
-                    type="number"
-                    [(ngModel)]="recipe.ingredients[i].quantity"
-                    name="ingredientQuantity{{ i }}"
-                    required
-                  />
-                  <input
-                    class="mb-2 w-full rounded border p-2"
-                    placeholder="Unit"
-                    [(ngModel)]="recipe.ingredients[i].unit"
-                    name="ingredientUnit{{ i }}"
-                    required
-                  />
+                  <div class="relative z-0 mb-4 w-full">
+                    <input
+                      type="text"
+                      name="ingredientName{{ i }}"
+                      placeholder=" "
+                      required
+                      class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                      [(ngModel)]="recipe.ingredients[i].name"
+                    />
+                    <label
+                      class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                      >Name</label
+                    >
+                  </div>
+                  <div class="relative z-0 mb-4 w-full">
+                    <input
+                      type="number"
+                      name="ingredientQuantity{{ i }}"
+                      placeholder=" "
+                      required
+                      class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                      [(ngModel)]="recipe.ingredients[i].quantity"
+                    />
+                    <label
+                      class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                      >Quantity</label
+                    >
+                  </div>
+                  <div class="relative z-0 mb-4 w-full">
+                    <input
+                      type="text"
+                      name="ingredientUnit{{ i }}"
+                      placeholder=" "
+                      required
+                      class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                      [(ngModel)]="recipe.ingredients[i].unit"
+                    />
+                    <label
+                      class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                      >Unit</label
+                    >
+                  </div>
                 </div>
               }
               <button
@@ -175,21 +218,33 @@
                 let i = $index
               ) {
                 <div>
-                  <input
-                    class="mb-2 w-full rounded border p-2"
-                    placeholder="Step Number"
-                    type="number"
-                    [(ngModel)]="recipe.instructions[i].stepNumber"
-                    name="instructionStepNumber{{ i }}"
-                    required
-                  />
-                  <textarea
-                    class="mb-2 w-full rounded border p-2"
-                    placeholder="Description"
-                    [(ngModel)]="recipe.instructions[i].description"
-                    name="instructionDescription{{ i }}"
-                    required
-                  ></textarea>
+                  <div class="relative z-0 mb-4 w-full">
+                    <input
+                      type="number"
+                      name="instructionStepNumber{{ i }}"
+                      placeholder=" "
+                      required
+                      class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                      [(ngModel)]="recipe.instructions[i].stepNumber"
+                    />
+                    <label
+                      class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                      >Step Number</label
+                    >
+                  </div>
+                  <div class="relative z-0 mb-4 w-full">
+                    <textarea
+                      name="instructionDescription{{ i }}"
+                      placeholder=" "
+                      required
+                      class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                      [(ngModel)]="recipe.instructions[i].description"
+                    ></textarea>
+                    <label
+                      class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                      >Description</label
+                    >
+                  </div>
                 </div>
               }
               <button
@@ -212,71 +267,89 @@
               <label class="mb-2 block text-sm font-medium"
                 >Nutrition Info</label
               >
-              <div class="mb-4">
-                <label class="mb-2 block text-sm font-medium">Calories</label>
+              <div class="relative z-0 mb-4 w-full">
                 <input
-                  class="mb-2 w-full rounded border p-2"
-                  placeholder="Calories"
                   type="number"
-                  [(ngModel)]="recipe.nutritionInfo.calories"
                   name="calories"
+                  placeholder=" "
                   required
+                  class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                  [(ngModel)]="recipe.nutritionInfo.calories"
                 />
+                <label
+                  class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                  >Calories</label
+                >
               </div>
-              <div class="mb-4">
-                <label class="mb-2 block text-sm font-medium">Fats</label>
+              <div class="relative z-0 mb-4 w-full">
                 <input
-                  class="mb-2 w-full rounded border p-2"
-                  placeholder="Fats"
                   type="number"
-                  [(ngModel)]="recipe.nutritionInfo.fats"
                   name="fats"
+                  placeholder=" "
                   required
+                  class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                  [(ngModel)]="recipe.nutritionInfo.fats"
                 />
+                <label
+                  class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                  >Fats</label
+                >
               </div>
-              <div class="mb-4">
-                <label class="mb-2 block text-sm font-medium">Carbs</label>
+              <div class="relative z-0 mb-4 w-full">
                 <input
-                  class="mb-2 w-full rounded border p-2"
-                  placeholder="Carbs"
                   type="number"
-                  [(ngModel)]="recipe.nutritionInfo.carbs"
                   name="carbs"
+                  placeholder=" "
                   required
+                  class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                  [(ngModel)]="recipe.nutritionInfo.carbs"
                 />
+                <label
+                  class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                  >Carbs</label
+                >
               </div>
-              <div class="mb-4">
-                <label class="mb-2 block text-sm font-medium">Protein</label>
+              <div class="relative z-0 mb-4 w-full">
                 <input
-                  class="mb-2 w-full rounded border p-2"
-                  placeholder="Protein"
                   type="number"
-                  [(ngModel)]="recipe.nutritionInfo.protein"
                   name="protein"
+                  placeholder=" "
                   required
+                  class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                  [(ngModel)]="recipe.nutritionInfo.protein"
                 />
+                <label
+                  class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                  >Protein</label
+                >
               </div>
-              <div class="mb-4">
-                <label class="mb-2 block text-sm font-medium">Fiber</label>
+              <div class="relative z-0 mb-4 w-full">
                 <input
-                  class="mb-2 w-full rounded border p-2"
-                  placeholder="Fiber"
                   type="number"
-                  [(ngModel)]="recipe.nutritionInfo.fiber"
                   name="fiber"
+                  placeholder=" "
                   required
+                  class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                  [(ngModel)]="recipe.nutritionInfo.fiber"
                 />
+                <label
+                  class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                  >Fiber</label
+                >
               </div>
-              <div class="mb-4">
-                <label class="mb-2 block text-sm font-medium">Sugar</label>
+              <div class="relative z-0 mb-4 w-full">
                 <input
-                  class="mb-2 w-full rounded border p-2"
-                  placeholder="Sugar"
                   type="number"
-                  [(ngModel)]="recipe.nutritionInfo.sugar"
                   name="sugar"
+                  placeholder=" "
                   required
+                  class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                  [(ngModel)]="recipe.nutritionInfo.sugar"
                 />
+                <label
+                  class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                  >Sugar</label
+                >
               </div>
             </div>
           </div>
