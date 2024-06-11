@@ -2,13 +2,13 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { HomeComponent } from './home/home.component';
-import { authGuard } from './services/auth.guard';
-import { noAuthGuard } from './services/no-auth.guard';
+import { authGuard } from './guards/auth.guard';
+import { noAuthGuard } from './guards/no-auth.guard';
 import { ProfileComponent } from './profile/profile.component';
-import { RecipeComponent } from './recipe/recipe.component';
-import { RecipeFormComponent } from './recipe-form/recipe-form.component';
-import { adminGuard } from './services/admin.guard';
-import { RecipeListComponent } from './recipe-list/recipe-list.component';
+import { RecipeComponent } from './recipe-components/recipe/recipe.component';
+import { RecipeFormComponent } from './recipe-components/recipe-form/recipe-form.component';
+import { adminGuard } from './guards/admin.guard';
+import { RecipeListComponent } from './recipe-components/recipe-list/recipe-list.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [noAuthGuard] },

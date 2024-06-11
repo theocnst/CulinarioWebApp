@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Recipe } from '../models/recipe.model';
+import { Recipe } from '../../models/recipe.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RecipeService } from '../services/recipe.service';
-import { AuthService } from '../services/auth.service';
+import { RecipeService } from '../../services/recipe.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-recipe',
@@ -41,7 +41,6 @@ export class RecipeComponent implements OnInit {
   }
 
   editRecipe(event: MouseEvent) {
-    
     if (this.recipe && this.recipe.recipeId) {
       console.log('Editing recipe');
       console.log('past if statement');

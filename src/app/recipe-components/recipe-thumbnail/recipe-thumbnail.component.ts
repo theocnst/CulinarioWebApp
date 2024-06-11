@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { Recipe } from '../models/recipe.model';
+import { Recipe } from '../../models/recipe.model';
 
 @Component({
   selector: 'app-recipe-thumbnail',
