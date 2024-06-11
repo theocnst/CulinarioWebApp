@@ -2,6 +2,24 @@
   <div
     class="mx-auto my-10 max-w-3xl overflow-hidden rounded-lg bg-white shadow-md"
   >
+    @if (isAdmin) {
+      <div class="flex items-center justify-between">
+        <button
+          type="button"
+          (click)="deleteRecipe($event)"
+          class="ml-8 rounded-md bg-gray-100 p-4 hover:bg-orange-200"
+        >
+          Delete
+        </button>
+        <button
+          type="button"
+          (click)="editRecipe($event)"
+          class="mr-8 rounded-md bg-gray-100 p-4 hover:bg-orange-200"
+        >
+          Edit
+        </button>
+      </div>
+    }
     <div class="p-6 text-center">
       <img
         [src]="recipe.image"
@@ -45,9 +63,9 @@
         }
       </div>
     </div>
-    <div class="bg-gray-100 p-4">
+    <div class="p bg-gray-100 p-4">
       <h2 class="mb-2 text-center text-xl font-semibold">Nutrition Info</h2>
-      <ul class="space-y-1">
+      <ul class="flex justify-center space-x-4">
         <li><strong>Calories:</strong> {{ recipe.nutritionInfo.calories }}</li>
         <li><strong>Fats:</strong> {{ recipe.nutritionInfo.fats }} g</li>
         <li><strong>Carbs:</strong> {{ recipe.nutritionInfo.carbs }} g</li>

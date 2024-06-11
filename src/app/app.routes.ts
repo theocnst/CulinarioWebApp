@@ -38,6 +38,11 @@ export const routes: Routes = [
     component: RecipeFormComponent,
     canActivate: [authGuard, adminGuard],
   },
+  {
+    path: 'recipe-form/:id',
+    component: RecipeFormComponent,
+    canActivate: [authGuard, adminGuard],
+  },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];

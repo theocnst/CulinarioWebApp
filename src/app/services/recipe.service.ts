@@ -30,4 +30,12 @@ export class RecipeService {
   addRecipe(recipe: Recipe): Observable<Recipe> {
     return this.http.post<Recipe>(this.apiUrl, recipe);
   }
+
+  updateRecipe(recipe: Recipe): Observable<Recipe> {
+    return this.http.put<Recipe>(`${this.apiUrl}/${recipe.recipeId}`, recipe);
+  }
+
+  deleteRecipe(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

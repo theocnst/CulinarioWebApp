@@ -36,47 +36,45 @@
                 >Image URL</label
               >
             </div>
-            <div class="flex space-x-4">
-              <div class="mb-4 w-1/4">
-                <label class="mb-2 block text-sm font-medium"
+            <div class="mb-4">
+              <div class="mb-2 flex space-x-4">
+                <label class="w-1/4 text-center text-sm font-medium"
                   >Prep Time (minutes)</label
                 >
+                <label class="w-1/4 text-center text-sm font-medium"
+                  >Cook Time (minutes)</label
+                >
+                <label class="w-1/4 text-center text-sm font-medium"
+                  >Total Time (minutes)</label
+                >
+                <label class="w-1/4 text-center text-sm font-medium"
+                  >Servings</label
+                >
+              </div>
+              <div class="flex space-x-4">
                 <input
-                  class="w-full rounded border p-2"
+                  class="w-1/4 rounded border p-2"
                   type="number"
                   [(ngModel)]="recipe.prepTime"
                   name="prepTime"
                   required
                 />
-              </div>
-              <div class="mb-4 w-1/4">
-                <label class="mb-2 block text-sm font-medium"
-                  >Cook Time (minutes)</label
-                >
                 <input
-                  class="w-full rounded border p-2"
+                  class="w-1/4 rounded border p-2"
                   type="number"
                   [(ngModel)]="recipe.cookTime"
                   name="cookTime"
                   required
                 />
-              </div>
-              <div class="mb-4 w-1/4">
-                <label class="mb-2 block text-sm font-medium"
-                  >Total Time (minutes)</label
-                >
                 <input
-                  class="w-full rounded border p-2"
+                  class="w-1/4 rounded border p-2"
                   type="number"
                   [(ngModel)]="recipe.totalTime"
                   name="totalTime"
                   required
                 />
-              </div>
-              <div class="mb-4 w-1/4">
-                <label class="mb-2 block text-sm font-medium">Servings</label>
                 <input
-                  class="w-full rounded border p-2"
+                  class="w-1/4 rounded border p-2"
                   type="number"
                   [(ngModel)]="recipe.servings"
                   name="servings"

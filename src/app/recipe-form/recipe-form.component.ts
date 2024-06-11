@@ -3,7 +3,7 @@ import { Recipe, RecipeType, Country } from '../models/recipe.model';
 import { RecipeService } from '../services/recipe.service';
 
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-recipe-form',
@@ -42,11 +42,27 @@ export class RecipeFormComponent implements OnInit {
   constructor(
     private recipeService: RecipeService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     this.fetchRecipeTypes();
     this.fetchCountries();
+
+    // Fetch recipe if editing
+    this.route.paramMap.subscribe((params) => {
+      const id = +params.get('id')!;
+      if (id) {
+        this.recipeService.getRecipeById(id).subscribe(
+          (data: Recipe) => {
+            this.recipe = data;
+          },
+          (error) => {
+            console.error('Error fetching recipe:', error);
+          },
+        );
+      }
+    });
   }
 
   fetchRecipeTypes(): void {
@@ -85,15 +101,26 @@ export class RecipeFormComponent implements OnInit {
 
   onSubmit(): void {
     console.log('Recipe:', this.recipe);
-    this.recipeService.addRecipe(this.recipe).subscribe(
-      (data: Recipe) => {
-        console.log('Recipe added successfully:', data);
-        // change router to navigate to the recipe details page
-        this.router.navigate([`/home`]);
-      },
-      (error) => {
-        console.error('Error adding recipe:', error);
-      },
-    );
+    if (this.recipe.recipeId) {
+      this.recipeService.updateRecipe(this.recipe).subscribe(
+        (data: Recipe) => {
+          console.log('Recipe updated successfully:', data);
+          this.router.navigate([`/recipe-list`]);
+        },
+        (error) => {
+          console.error('Error updating recipe:', error);
+        },
+      );
+    } else {
+      this.recipeService.addRecipe(this.recipe).subscribe(
+        (data: Recipe) => {
+          console.log('Recipe added successfully:', data);
+          this.router.navigate([`/recipe-list`]);
+        },
+        (error) => {
+          console.error('Error adding recipe:', error);
+        },
+      );
+    }
   }
 }
