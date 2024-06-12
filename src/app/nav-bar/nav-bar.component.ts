@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service'; // Ensure the path is correct
+import { ProfileService } from '../services/profile.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -12,14 +13,28 @@ export class NavBarComponent implements OnInit {
   isMobileMenuOpen = false;
   isProfileDropdownOpen = false;
   isAdmin = false;
+  username: string | null = null;
+  profilePictureURL: string | null = null;
 
   constructor(
     private router: Router,
     private authService: AuthService,
+    private profileService: ProfileService,
   ) {}
 
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdmin();
+    this.username = this.authService.getCurrentUsername();
+    if (this.username) {
+      this.profileService.getUserProfilePicture(this.username).subscribe(
+        (profilePictureURL) => {
+          this.profilePictureURL = profilePictureURL;
+        },
+        (error) => {
+          console.error('Error fetching profile picture:', error);
+        },
+      );
+    }
   }
 
   toggleMobileMenu(event: MouseEvent): void {

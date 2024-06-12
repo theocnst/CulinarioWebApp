@@ -40,6 +40,6 @@ export class ProfileComponent implements OnInit {
     });
 
     //print the user data in detail
-    console.log('User info:', this.userInfo?.profilePicture);
+    console.log('User info:', this.userInfo);
   }
 }
