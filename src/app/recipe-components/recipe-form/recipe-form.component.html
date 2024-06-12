@@ -3,7 +3,9 @@
     class="mx-auto max-w-lg border-0 bg-white px-6 py-12 shadow-lg sm:rounded-3xl"
   >
     <div class="container mx-auto p-4">
-      <h2 class="mb-4 text-2xl">Create a New Recipe</h2>
+      <h2 class="mb-4 text-2xl">
+        {{ recipe.recipeId ? "Editing " + recipe.name : "Create a New Recipe" }}
+      </h2>
       <form (ngSubmit)="onSubmit()">
         <!-- Step 1: Basic Info -->
         @if (currentStep === 1) {
@@ -38,43 +40,47 @@
             </div>
             <div class="mb-4">
               <div class="mb-2 flex space-x-4">
-                <label class="w-1/4 text-center text-sm font-medium"
+                <label
+                  class="w-1/4 text-center text-sm font-medium text-gray-700"
                   >Prep Time (minutes)</label
                 >
-                <label class="w-1/4 text-center text-sm font-medium"
+                <label
+                  class="w-1/4 text-center text-sm font-medium text-gray-700"
                   >Cook Time (minutes)</label
                 >
-                <label class="w-1/4 text-center text-sm font-medium"
+                <label
+                  class="w-1/4 text-center text-sm font-medium text-gray-700"
                   >Total Time (minutes)</label
                 >
-                <label class="w-1/4 text-center text-sm font-medium"
+                <label
+                  class="w-1/4 text-center text-sm font-medium text-gray-700"
                   >Servings</label
                 >
               </div>
               <div class="flex space-x-4">
                 <input
-                  class="w-1/4 rounded border p-2"
+                  class="w-1/4 rounded border p-2 text-gray-800"
                   type="number"
                   [(ngModel)]="recipe.prepTime"
                   name="prepTime"
                   required
                 />
                 <input
-                  class="w-1/4 rounded border p-2"
+                  class="w-1/4 rounded border p-2 text-gray-800"
                   type="number"
                   [(ngModel)]="recipe.cookTime"
                   name="cookTime"
                   required
                 />
                 <input
-                  class="w-1/4 rounded border p-2"
+                  class="w-1/4 rounded border p-2 text-gray-800"
                   type="number"
                   [(ngModel)]="recipe.totalTime"
                   name="totalTime"
                   required
                 />
                 <input
-                  class="w-1/4 rounded border p-2"
+                  class="w-1/4 rounded border p-2 text-gray-800"
                   type="number"
                   [(ngModel)]="recipe.servings"
                   name="servings"
@@ -97,25 +103,45 @@
               >
             </div>
             <div class="relative z-0 mb-4 w-full">
-              <select
-                name="countryName"
-                placeholder=" "
-                required
-                class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
-                [(ngModel)]="recipe.countryName"
-              >
-                <option value="" selected disabled hidden></option>
-                @for (country of countries; track country) {
-                  <option [value]="country.countryName">
-                    {{ country.countryName }}
-                  </option>
-                }
-              </select>
-              <label
-                class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
-                >Country</label
-              >
+              @if (!isEditing) {
+                <div class="relative z-0 w-full" (dblclick)="enableEdit()">
+                  <select
+                    name="countryName"
+                    required
+                    class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                    [(ngModel)]="recipe.countryName"
+                  >
+                    <option value="" selected disabled hidden></option>
+                    @for (country of countries; track country.countryName) {
+                      <option [value]="country.countryName">
+                        {{ country.countryName }}
+                      </option>
+                    }
+                  </select>
+                  <label
+                    class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                    >Country</label
+                  >
+                </div>
+              } @else {
+                <div class="relative z-0 w-full">
+                  <input
+                    type="text"
+                    name="countryNameInput"
+                    placeholder="Enter Country"
+                    required
+                    class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                    [(ngModel)]="recipe.countryName"
+                    (blur)="disableEdit()"
+                  />
+                  <label
+                    class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+                    >Enter Country</label
+                  >
+                </div>
+              }
             </div>
+
             <div class="relative z-0 mb-4 w-full">
               <select
                 name="recipeType"
@@ -141,14 +167,14 @@
         @if (currentStep === 2) {
           <div>
             <div class="mb-4">
-              <label class="mb-2 block text-sm font-medium">Ingredients</label>
+              <label class="mb-4 block text-lg font-medium">Ingredients</label>
               @for (
                 ingredient of recipe.ingredients;
                 track ingredient;
                 let i = $index
               ) {
-                <div>
-                  <div class="relative z-0 mb-4 w-full">
+                <div class="flex">
+                  <div class="relative z-0 m-4 mb-2 w-full">
                     <input
                       type="text"
                       name="ingredientName{{ i }}"
@@ -162,13 +188,13 @@
                       >Name</label
                     >
                   </div>
-                  <div class="relative z-0 mb-4 w-full">
+                  <div class="relative z-0 m-4 mb-2 w-28">
                     <input
                       type="number"
                       name="ingredientQuantity{{ i }}"
                       placeholder=" "
                       required
-                      class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                      class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 text-center focus:border-black focus:outline-none focus:ring-0"
                       [(ngModel)]="recipe.ingredients[i].quantity"
                     />
                     <label
@@ -176,7 +202,7 @@
                       >Quantity</label
                     >
                   </div>
-                  <div class="relative z-0 mb-4 w-full">
+                  <div class="relative z-0 m-4 mb-2 w-36">
                     <input
                       type="text"
                       name="ingredientUnit{{ i }}"
@@ -190,14 +216,19 @@
                       >Unit</label
                     >
                   </div>
+                  <button
+                    type="button"
+                    class="mt-5 h-9 rounded-xl bg-red-500 px-4 text-white"
+                    (click)="removeIngredient(i)"
+                  >
+                    X
+                  </button>
                 </div>
               }
               <button
                 type="button"
-                class="w-full rounded bg-blue-500 px-4 py-2 text-white"
-                (click)="
-                  recipe.ingredients.push({ name: '', quantity: 0, unit: '' })
-                "
+                class="w-full rounded bg-purple-400 px-4 py-2 text-white"
+                (click)="addIngredient()"
               >
                 Add Ingredient
               </button>
@@ -209,48 +240,43 @@
         @if (currentStep === 3) {
           <div>
             <div class="mb-4">
-              <label class="mb-2 block text-sm font-medium">Instructions</label>
+              <label class="mb-4 block text-lg font-medium">Instructions</label>
               @for (
                 instruction of recipe.instructions;
                 track instruction;
                 let i = $index
               ) {
-                <div>
-                  <div class="relative z-0 mb-4 w-full">
-                    <input
-                      type="number"
-                      name="instructionStepNumber{{ i }}"
-                      placeholder=" "
-                      required
-                      class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
-                      [(ngModel)]="recipe.instructions[i].stepNumber"
-                    />
-                    <label
-                      class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
-                      >Step Number</label
-                    >
-                  </div>
-                  <div class="relative z-0 mb-4 w-full">
+                <div class="mb-4 flex items-start">
+                  <span
+                    class="block w-12 pt-3 text-center font-semibold text-gray-700"
+                    >Step {{ recipe.instructions[i].stepNumber }}</span
+                  >
+                  <div class="relative mx-4 flex-1">
                     <textarea
                       name="instructionDescription{{ i }}"
                       placeholder=" "
                       required
-                      class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+                      class="block w-full rounded-lg border-2 border-gray-200 bg-transparent px-3 py-2 focus:border-black focus:outline-none focus:ring-0"
                       [(ngModel)]="recipe.instructions[i].description"
                     ></textarea>
                     <label
-                      class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
-                      >Description</label
+                      class="absolute left-3 top-2 -translate-y-1/2 transform text-gray-500 transition-all duration-300"
                     >
+                    </label>
                   </div>
+                  <button
+                    type="button"
+                    class="mt-3 h-9 rounded-xl bg-red-500 px-4 text-white"
+                    (click)="removeInstruction(i)"
+                  >
+                    X
+                  </button>
                 </div>
               }
               <button
                 type="button"
-                class="w-full rounded bg-blue-500 px-4 py-2 text-white"
-                (click)="
-                  recipe.instructions.push({ stepNumber: 0, description: '' })
-                "
+                class="w-full rounded bg-purple-400 px-4 py-2 text-white"
+                (click)="addInstruction()"
               >
                 Add Instruction
               </button>
@@ -262,7 +288,7 @@
         @if (currentStep === 4) {
           <div>
             <div class="mb-4">
-              <label class="mb-2 block text-sm font-medium"
+              <label class="mb-4 block text-lg font-medium"
                 >Nutrition Info</label
               >
               <div class="relative z-0 mb-4 w-full">
@@ -385,3 +411,65 @@
     </div>
   </div>
 </div>
+
+<!-- Modal for validation errors -->
+@if (errorMessage) {
+  <div class="fixed inset-0 z-10 overflow-y-auto">
+    <div
+      class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0"
+    >
+      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+      <span
+        class="hidden sm:inline-block sm:h-screen sm:align-middle"
+        aria-hidden="true"
+        >&#8203;</span
+      >
+      <div
+        class="inline-block transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle"
+      >
+        <div class="sm:flex sm:items-start">
+          <div
+            class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+          >
+            <svg
+              class="h-6 w-6 text-red-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
+          <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+            <h3
+              class="text-lg font-medium leading-6 text-gray-900"
+              id="modal-title"
+            >
+              Validation Error
+            </h3>
+            <div class="mt-2">
+              <p class="text-sm text-gray-500">{{ errorMessage }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+          <button
+            (click)="closeModal()"
+            type="button"
+            class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

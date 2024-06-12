@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe, RecipeType, Country } from '../../models/recipe.model';
 import { RecipeService } from '../../services/recipe.service';
-
+import { RecipeValidationService } from '../../services/recipe-validation.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -38,9 +38,12 @@ export class RecipeFormComponent implements OnInit {
   recipeTypes: RecipeType[] = [];
   countries: Country[] = [];
   currentStep: number = 1;
+  isEditing: boolean = false;
+  errorMessage: string = '';
 
   constructor(
     private recipeService: RecipeService,
+    private validationService: RecipeValidationService,
     private router: Router,
     private route: ActivatedRoute,
   ) {}
@@ -88,39 +91,85 @@ export class RecipeFormComponent implements OnInit {
   }
 
   nextStep(): void {
-    if (this.currentStep < 4) {
+    if (
+      this.validationService.validateCurrentStep(this.recipe, this.currentStep)
+    ) {
       this.currentStep++;
+    } else {
+      this.errorMessage = this.validationService.errorMessage;
     }
   }
 
   prevStep(): void {
-    if (this.currentStep > 1) {
-      this.currentStep--;
-    }
+    this.currentStep--;
   }
 
   onSubmit(): void {
-    console.log('Recipe:', this.recipe);
-    if (this.recipe.recipeId) {
-      this.recipeService.updateRecipe(this.recipe).subscribe(
-        (data: Recipe) => {
-          console.log('Recipe updated successfully:', data);
-          this.router.navigate([`/recipe-list`]);
-        },
-        (error) => {
-          console.error('Error updating recipe:', error);
-        },
-      );
+    if (this.validationService.validateForm(this.recipe)) {
+      if (this.recipe.recipeId) {
+        this.recipeService.updateRecipe(this.recipe).subscribe(
+          (data: Recipe) => {
+            console.log('Recipe updated successfully:', data);
+            this.router.navigate(['/recipe-list']);
+          },
+          (error) => {
+            console.error('Error updating recipe:', error);
+            this.errorMessage = 'Error updating recipe.';
+          },
+        );
+      } else {
+        this.recipeService.addRecipe(this.recipe).subscribe(
+          (data: Recipe) => {
+            console.log('Recipe added successfully:', data);
+            this.router.navigate(['/recipe-list']);
+          },
+          (error) => {
+            console.error('Error adding recipe:', error);
+            this.errorMessage = 'Error adding recipe.';
+          },
+        );
+      }
     } else {
-      this.recipeService.addRecipe(this.recipe).subscribe(
-        (data: Recipe) => {
-          console.log('Recipe added successfully:', data);
-          this.router.navigate([`/recipe-list`]);
-        },
-        (error) => {
-          console.error('Error adding recipe:', error);
-        },
-      );
+      this.errorMessage = this.validationService.errorMessage;
     }
+  }
+
+  addIngredient(): void {
+    this.recipe.ingredients.push({ name: '', quantity: 0, unit: '' });
+  }
+
+  removeIngredient(index: number): void {
+    this.recipe.ingredients.splice(index, 1);
+  }
+
+  addInstruction(): void {
+    const newStepNumber = this.recipe.instructions.length + 1;
+    this.recipe.instructions.push({
+      stepNumber: newStepNumber,
+      description: '',
+    });
+  }
+
+  removeInstruction(index: number): void {
+    this.recipe.instructions.splice(index, 1);
+    this.updateStepNumbers();
+  }
+
+  updateStepNumbers(): void {
+    this.recipe.instructions.forEach((instruction, index) => {
+      instruction.stepNumber = index + 1;
+    });
+  }
+
+  enableEdit() {
+    this.isEditing = true;
+  }
+
+  disableEdit() {
+    this.isEditing = false;
+  }
+
+  closeModal() {
+    this.errorMessage = '';
   }
 }
