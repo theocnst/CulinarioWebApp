@@ -35,6 +35,9 @@ export class NavBarComponent implements OnInit {
         },
       );
     }
+    this.profileService.profilePicture$.subscribe((url) => {
+      this.profilePictureURL = url;
+    });
   }
 
   toggleMobileMenu(event: MouseEvent): void {
@@ -88,6 +91,16 @@ export class NavBarComponent implements OnInit {
     }
   }
 
+  onSettingsClick(): void {
+    console.log('Toggling settings');
+    const username = this.authService.getCurrentUsername();
+    if (username) {
+      this.router.navigate([`/profile-edit/${username}`]);
+    } else {
+      console.error('No username found in local storage');
+    }
+  }
+
   onLogoutClick(): void {
     console.log('Logging out');
     this.authService.logout();
@@ -97,11 +110,5 @@ export class NavBarComponent implements OnInit {
     console.log('Toggling notifications dropdown');
     // Implement notifications dropdown functionality in the future
     console.error('toggleNotificationsDropdown Method not implemented yet.');
-  }
-
-  onSettingsClick() {
-    console.log('Toggling settings');
-    // Implement settings functionality in the future
-    console.error('onSettingsClick Method not implemented yet.');
   }
 }

@@ -33,13 +33,25 @@ export class ProfileComponent implements OnInit {
     this.profileService.getUserProfile(username).subscribe({
       next: (data) => {
         this.userInfo = data;
+        if (this.userInfo && this.userInfo.dateOfBirth) {
+          this.userInfo.dateOfBirth = this.formatDate(
+            this.userInfo.dateOfBirth,
+          );
+        }
+        //print the user data in detail
+        console.log('User info loaded successfully:', this.userInfo);
       },
       error: (err) => {
         console.error('Error loading user profile', err);
       },
     });
+  }
 
-    //print the user data in detail
-    console.log('User info:', this.userInfo);
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   }
 }

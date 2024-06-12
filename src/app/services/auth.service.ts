@@ -27,6 +27,21 @@ export class AuthService {
     return !!localStorage.getItem('jwt');
   }
 
+  private handleAuthResponse(response: AuthResponse): void {
+    console.log('Auth response:', response.message);
+
+    localStorage.setItem('jwt', response.token); // Store token in local storage
+    console.log('JWT token stored:', response.token);
+
+    const decodedToken: any = jwtDecode(response.token);
+    const username = decodedToken.username; // Extract username from token
+    localStorage.setItem('username', username); // Store username
+    console.log('Username stored:', username);
+
+    this.updateAuthStatus(true); // Update auth status
+    this.router.navigate(['/home']);
+  }
+
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(
@@ -34,22 +49,7 @@ export class AuthService {
         { email, password },
         { withCredentials: true },
       )
-      .pipe(
-        tap((response) => {
-          console.log('Login response:', response.message);
-
-          localStorage.setItem('jwt', response.token); // Store token in local storage
-          console.log('JWT token stored:', response.token);
-
-          const decodedToken: any = jwtDecode(response.token);
-          const username = decodedToken.username; // Extract username from token
-          localStorage.setItem('username', username); // Store username
-          console.log('Username stored:', username);
-
-          this.updateAuthStatus(true); // Update auth status
-          this.router.navigate(['/home']);
-        }),
-      );
+      .pipe(tap((response) => this.handleAuthResponse(response)));
   }
 
   register(
@@ -63,15 +63,7 @@ export class AuthService {
         { username, email, password },
         { withCredentials: true },
       )
-      .pipe(
-        tap((response) => {
-          console.log('Register response:', response.message);
-          localStorage.setItem('jwt', response.token); // Store token in local storage
-          console.log('JWT token stored:', response.token);
-          this.updateAuthStatus(true); // Update auth status
-          this.router.navigate(['/home']);
-        }),
-      );
+      .pipe(tap((response) => this.handleAuthResponse(response)));
   }
 
   logout(): void {

@@ -9,6 +9,7 @@ import { RecipeComponent } from './recipe-components/recipe/recipe.component';
 import { RecipeFormComponent } from './recipe-components/recipe-form/recipe-form.component';
 import { adminGuard } from './guards/admin.guard';
 import { RecipeListComponent } from './recipe-components/recipe-list/recipe-list.component';
+import { ProfileEditComponent } from './profile-edit/profile-edit.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [noAuthGuard] },
@@ -21,6 +22,11 @@ export const routes: Routes = [
   {
     path: 'profile/:username',
     component: ProfileComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'profile-edit/:username',
+    component: ProfileEditComponent,
     canActivate: [authGuard],
   },
   {

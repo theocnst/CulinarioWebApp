@@ -1,0 +1,96 @@
+<div class="min-h-screen bg-gray-100 p-4 sm:p-12">
+  <div
+    class="mx-auto max-w-lg border-0 bg-white px-6 py-12 shadow-lg sm:rounded-3xl"
+  >
+    <h2 class="mb-4 text-2xl">
+      {{ username ? "Edit Profile" : "Create Profile" }}
+    </h2>
+    <form (ngSubmit)="onSubmit()">
+      @if (errorMessage) {
+        <div class="mb-4 text-red-500">{{ errorMessage }}</div>
+      }
+      <div class="mb-4 text-center">
+        <img
+          [src]="profile.profilePicture"
+          alt="Profile Picture"
+          class="mx-auto mb-4 h-32 w-32 rounded-full border-4 border-indigo-500"
+        />
+      </div>
+      <div class="relative z-0 mb-4 w-full">
+        <input
+          type="text"
+          name="profilePicture"
+          placeholder=" "
+          class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+          [(ngModel)]="profile.profilePicture"
+          (ngModelChange)="onProfilePictureChange($event)"
+        />
+        <label class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+          >Profile Picture URL</label
+        >
+      </div>
+      <div class="relative z-0 mb-4 w-full">
+        <input
+          type="text"
+          name="firstName"
+          placeholder=" "
+          required
+          class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+          [(ngModel)]="profile.firstName"
+        />
+        <label class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+          >First Name</label
+        >
+      </div>
+      <div class="relative z-0 mb-4 w-full">
+        <input
+          type="text"
+          name="lastName"
+          placeholder=" "
+          required
+          class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+          [(ngModel)]="profile.lastName"
+        />
+        <label class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+          >Last Name</label
+        >
+      </div>
+      <div class="relative z-0 mb-4 w-full">
+        <textarea
+          name="description"
+          placeholder=" "
+          class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+          [(ngModel)]="profile.description"
+        ></textarea>
+        <label class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+          >Description</label
+        >
+      </div>
+      <div class="relative z-0 mb-4 w-full">
+        <input
+          type="date"
+          name="dateOfBirth"
+          placeholder="YYYY-MM-DD"
+          required
+          class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
+          [(ngModel)]="profile.dateOfBirth"
+        />
+        <label class="-z-1 origin-0 absolute top-3 text-gray-500 duration-300"
+          >Date of Birth</label
+        >
+      </div>
+      <div class="flex justify-between">
+        <button
+          type="button"
+          class="rounded bg-gray-500 px-4 py-2 text-white"
+          (click)="onCancel()"
+        >
+          Cancel
+        </button>
+        <button type="submit" class="rounded bg-green-500 px-4 py-2 text-white">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

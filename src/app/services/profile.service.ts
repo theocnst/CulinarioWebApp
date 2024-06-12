@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
+import { UserProfile } from '../models/profile.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
   private apiUrl = 'https://localhost:7053/api/UserProfile';
+  private profilePictureSubject = new BehaviorSubject<string | null>(null);
+  profilePicture$ = this.profilePictureSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -18,5 +21,16 @@ export class ProfileService {
     return this.http
       .get<any>(`${this.apiUrl}/${username}/details`)
       .pipe(map((data: any) => data.profilePicture));
+  }
+
+  updateUserProfile(profile: UserProfile): Observable<UserProfile> {
+    return this.http.put<UserProfile>(
+      `${this.apiUrl}/${profile.username}`,
+      profile,
+    );
+  }
+
+  updateProfilePicture(url: string): void {
+    this.profilePictureSubject.next(url);
   }
 }
