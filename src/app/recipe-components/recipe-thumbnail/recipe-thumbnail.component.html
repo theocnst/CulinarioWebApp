@@ -1,5 +1,5 @@
 <div
-  class="max-w-xs cursor-pointer overflow-hidden rounded shadow-lg"
+  class="mx-auto max-w-xs cursor-pointer overflow-hidden rounded shadow-lg"
   (click)="navigateToRecipe()"
 >
   @if (recipe.image) {
@@ -21,7 +21,7 @@
       <span class="text-yellow-500">
         @for (star of starArray; track star) {
           <svg
-            class="inline-block h-4 w-4"
+            class="inline-block h-5 w-5"
             [attr.fill]="getStarFill(star)"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -42,7 +42,7 @@
           </svg>
         }
       </span>
-      <span class="text-gray-600"
+      <span class="text-lg font-semibold text-gray-600"
         >{{ recipe.averageRating?.toFixed(1) || 0 }} ({{
           recipe.numberOfRatings
         }})</span

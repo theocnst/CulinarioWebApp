@@ -1,74 +1,93 @@
-<div class="container mx-auto p-4">
-  <h2 class="mb-4 text-2xl">Recipe List</h2>
-  <div class="mb-4 grid gap-4 md:grid-cols-2">
-    <div class="mb-4">
-      <label class="block text-sm font-medium">Name</label>
-      <input
-        class="w-full rounded border p-2"
-        [(ngModel)]="filters.name"
-        placeholder="Filter by name"
-      />
+<div class="container relative mx-auto p-4">
+  <button
+    (click)="toggleFilters()"
+    class="absolute left-4 top-4 rounded-md bg-orange-200 p-4 text-xl"
+  >
+    Filters
+  </button>
+  @if (showFilters) {
+    <div class="mb-2 mt-2 flex flex-wrap justify-center gap-4">
+      <div class="mb-4 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
+        <label class="block text-sm font-medium">Name</label>
+        <input
+          class="w-full rounded border p-2"
+          [(ngModel)]="filters.name"
+          placeholder="Filter by name"
+          (ngModelChange)="applyFilters()"
+        />
+      </div>
+      <div class="mb-4 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
+        <label class="block text-sm font-medium">Country</label>
+        <select
+          class="w-full rounded border p-2"
+          [(ngModel)]="filters.country"
+          (ngModelChange)="applyFilters()"
+        >
+          <option value="">All</option>
+          @for (country of countries; track country) {
+            <option [value]="country.countryName">
+              {{ country.countryName }}
+            </option>
+          }
+        </select>
+      </div>
+      <div class="mb-4 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
+        <label class="block text-sm font-medium">Recipe Type</label>
+        <select
+          class="w-full rounded border p-2"
+          [(ngModel)]="filters.recipeType"
+          (ngModelChange)="applyFilters()"
+        >
+          <option value="">All</option>
+          @for (type of recipeTypes; track type) {
+            <option [value]="type.name">{{ type.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="mb-4 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
+        <label class="block text-sm font-medium">Total Time (minutes)</label>
+        <input
+          class="w-full rounded border p-2"
+          type="number"
+          [(ngModel)]="filters.totalTime"
+          placeholder="Filter by total time"
+          (ngModelChange)="applyFilters()"
+        />
+      </div>
+      <div class="mb-4 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
+        <label class="block text-sm font-medium">Admin</label>
+        <input
+          class="w-full rounded border p-2"
+          [(ngModel)]="filters.admin"
+          placeholder="Filter by admin"
+          (ngModelChange)="applyFilters()"
+        />
+      </div>
+      <div class="mb-4 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
+        <label class="block text-sm font-medium">Average Rating</label>
+        <input
+          class="w-full rounded border p-2"
+          type="number"
+          [(ngModel)]="filters.averageRating"
+          placeholder="Filter by rating"
+          (ngModelChange)="applyFilters()"
+        />
+      </div>
+      <div class="mb-4 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
+        <label class="block text-sm font-medium">Number of Ratings</label>
+        <input
+          class="w-full rounded border p-2"
+          type="number"
+          [(ngModel)]="filters.numberOfRatings"
+          placeholder="Filter by number of ratings"
+          (ngModelChange)="applyFilters()"
+        />
+      </div>
     </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium">Country</label>
-      <select class="w-full rounded border p-2" [(ngModel)]="filters.country">
-        <option value="">All</option>
-        @for (country of countries; track country) {
-          <option [value]="country.countryName">
-            {{ country.countryName }}
-          </option>
-        }
-      </select>
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium">Recipe Type</label>
-      <select
-        class="w-full rounded border p-2"
-        [(ngModel)]="filters.recipeType"
-      >
-        <option value="">All</option>
-        @for (type of recipeTypes; track type) {
-          <option [value]="type.name">{{ type.name }}</option>
-        }
-      </select>
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium">Total Time (minutes)</label>
-      <input
-        class="w-full rounded border p-2"
-        type="number"
-        [(ngModel)]="filters.totalTime"
-        placeholder="Filter by total time"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium">Admin</label>
-      <input
-        class="w-full rounded border p-2"
-        [(ngModel)]="filters.admin"
-        placeholder="Filter by admin"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium">Average Rating</label>
-      <input
-        class="w-full rounded border p-2"
-        type="number"
-        [(ngModel)]="filters.averageRating"
-        placeholder="Filter by rating"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium">Number of Ratings</label>
-      <input
-        class="w-full rounded border p-2"
-        type="number"
-        [(ngModel)]="filters.numberOfRatings"
-        placeholder="Filter by number of ratings"
-      />
-    </div>
-  </div>
-  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  }
+  <div
+    class="mt-16 grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+  >
     @for (recipe of filteredRecipes; track recipe) {
       <app-recipe-thumbnail [recipe]="recipe"></app-recipe-thumbnail>
     }

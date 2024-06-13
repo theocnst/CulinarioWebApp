@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit {
   recipeTypes: RecipeType[] = [];
   countries: Country[] = [];
 
+  showFilters = false;
+
   filters = {
     name: '',
     country: '',
@@ -60,27 +62,46 @@ export class HomeComponent implements OnInit {
   }
 
   applyFilters(): void {
+    console.log('Applying filters:', this.filters);
     this.filteredRecipes = this.recipes.filter((recipe) => {
-      return (
-        (!this.filters.name ||
-          recipe.name
-            .toLowerCase()
-            .includes(this.filters.name.toLowerCase())) &&
-        (!this.filters.country ||
-          recipe.countryName === this.filters.country) &&
-        (!this.filters.recipeType ||
-          recipe.recipeType.name === this.filters.recipeType) &&
-        (!this.filters.totalTime ||
-          recipe.totalTime <= this.filters.totalTime) &&
-        (!this.filters.admin ||
-          recipe.adminUsername
-            .toLowerCase()
-            .includes(this.filters.admin.toLowerCase())) &&
-        (!this.filters.averageRating ||
-          (recipe.averageRating ?? 0) >= this.filters.averageRating) &&
-        (!this.filters.numberOfRatings ||
-          (recipe.numberOfRatings ?? 0) >= this.filters.numberOfRatings)
-      );
+      const matchesName =
+        !this.filters.name ||
+        recipe.name.toLowerCase().includes(this.filters.name.toLowerCase());
+      const matchesCountry =
+        !this.filters.country || recipe.countryName === this.filters.country;
+      const matchesRecipeType =
+        !this.filters.recipeType ||
+        recipe.recipeType.name === this.filters.recipeType;
+      const matchesTotalTime =
+        !this.filters.totalTime || recipe.totalTime <= this.filters.totalTime;
+      const matchesAdmin =
+        !this.filters.admin ||
+        recipe.adminUsername
+          .toLowerCase()
+          .includes(this.filters.admin.toLowerCase());
+      const matchesAverageRating =
+        !this.filters.averageRating ||
+        (recipe.averageRating ?? 0) >= this.filters.averageRating;
+      const matchesNumberOfRatings =
+        !this.filters.numberOfRatings ||
+        (recipe.numberOfRatings ?? 0) >= this.filters.numberOfRatings;
+
+      const matches =
+        matchesName &&
+        matchesCountry &&
+        matchesRecipeType &&
+        matchesTotalTime &&
+        matchesAdmin &&
+        matchesAverageRating &&
+        matchesNumberOfRatings;
+      if (matches) {
+        console.log('Recipe matches:', recipe);
+      }
+      return matches;
     });
+  }
+
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
   }
 }
