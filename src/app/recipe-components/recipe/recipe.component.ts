@@ -14,6 +14,8 @@ import { AuthService } from '../../services/auth.service';
 export class RecipeComponent implements OnInit {
   recipe: Recipe | undefined;
   isAdmin = false;
+  userRating = 0;
+  starArray = Array.from({ length: 10 }, (_, i) => i + 1);
 
   constructor(
     private route: ActivatedRoute,
@@ -26,7 +28,7 @@ export class RecipeComponent implements OnInit {
     this.isAdmin = this.authService.isAdmin();
 
     this.route.paramMap.subscribe((params) => {
-      const id = +params.get('id')!; // Use the non-null assertion operator
+      const id = +params.get('id')!;
       if (id) {
         this.recipeService.getRecipeById(id).subscribe(
           (data: Recipe) => {
@@ -53,11 +55,46 @@ export class RecipeComponent implements OnInit {
     if (this.recipe && this.recipe.recipeId) {
       this.recipeService.deleteRecipe(this.recipe.recipeId).subscribe(
         () => {
-          console.log('Recipe deleted');
+          console.log('Recipe deleted successfully');
           this.router.navigate(['/recipe-list']);
         },
         (error) => {
           console.error('Error deleting recipe:', error);
+        },
+      );
+    }
+  }
+
+  getStarFill(star: number): string {
+    const rating = this.recipe?.averageRating || 0;
+    if (star <= rating) {
+      return 'currentColor';
+    } else if (star <= rating + 0.5) {
+      return 'url(#half-star)'; // This will refer to the gradient for half star
+    } else {
+      return 'none';
+    }
+  }
+
+  isStarSelected(star: number): boolean {
+    return star === this.userRating;
+  }
+
+  rateRecipe(score: number) {
+    if (this.recipe && this.recipe.recipeId) {
+      const rating = {
+        username: this.authService.getCurrentUsername()!,
+        recipeId: this.recipe.recipeId,
+        score: score,
+      };
+
+      this.recipeService.rateRecipe(this.recipe.recipeId, rating).subscribe(
+        (updatedRecipe) => {
+          this.recipe = updatedRecipe;
+          this.userRating = score;
+        },
+        (error) => {
+          console.error('Error rating recipe:', error);
         },
       );
     }

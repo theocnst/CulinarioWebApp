@@ -28,6 +28,49 @@
       />
       <h1 class="mb-2 text-3xl font-bold">{{ recipe.name }}</h1>
       <p class="mb-4 text-gray-600">{{ recipe.description }}</p>
+      <div class="flex justify-center">
+        <div class="flex items-center">
+          @for (star of starArray; track star) {
+            <svg
+              class="h-6 w-6 cursor-pointer text-yellow-500"
+              [attr.fill]="getStarFill(star)"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              (click)="rateRecipe(star)"
+            >
+              <defs>
+                <linearGradient id="half-star">
+                  <stop offset="50%" stop-color="currentColor" />
+                  <stop offset="50%" stop-color="background" />
+                </linearGradient>
+              </defs>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 2.5l3.094 6.26 6.906 1.004-5 4.864 1.18 6.882L12 17.727l-6.18 3.254L7 14.628 2 9.764l6.906-1.004L12 2.5z"
+              />
+              @if (isStarSelected(star)) {
+                <path
+                  class="text-orange-500"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 2.5l3.094 6.26 6.906 1.004-5 4.864 1.18 6.882L12 17.727l-6.18 3.254L7 14.628 2 9.764l6.906-1.004L12 2.5z"
+                  fill="currentColor"
+                />
+              }
+            </svg>
+          }
+        </div>
+        <span class="ml-2 text-xl">{{
+          recipe.averageRating?.toFixed(1) || 0
+        }}</span>
+        <span class="ml-2 text-gray-600"
+          >({{ recipe.numberOfRatings }} votes)</span
+        >
+      </div>
     </div>
     <div class="flex justify-around bg-gray-100 p-4">
       <p><strong>Prep Time:</strong> {{ recipe.prepTime }} minutes</p>

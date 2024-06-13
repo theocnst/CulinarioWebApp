@@ -26,6 +26,12 @@ export interface Country {
   countryName: string;
 }
 
+export interface Rating {
+  username: string;
+  recipeId: number;
+  score: number;
+}
+
 export interface Recipe {
   recipeId?: number;
   name: string;
@@ -41,4 +47,6 @@ export interface Recipe {
   nutritionInfo: NutritionInfo;
   ingredients: Ingredient[];
   instructions: Instruction[];
+  averageRating?: number;
+  numberOfRatings?: number;
 }
