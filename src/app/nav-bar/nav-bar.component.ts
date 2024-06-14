@@ -105,10 +105,4 @@ export class NavBarComponent implements OnInit {
     console.log('Logging out');
     this.authService.logout();
   }
-
-  toggleNotificationsDropdown(event: MouseEvent): void {
-    console.log('Toggling notifications dropdown');
-    // Implement notifications dropdown functionality in the future
-    console.error('toggleNotificationsDropdown Method not implemented yet.');
-  }
 }
