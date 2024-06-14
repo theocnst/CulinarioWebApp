@@ -1,1 +1,29 @@
-<p>comment works!</p>
+<div class="comment relative flex items-start space-x-4 p-4">
+  <img
+    [src]="profilePicture"
+    alt="Profile Picture"
+    class="h-10 w-10 cursor-pointer rounded-full object-cover"
+    (click)="navigateToProfile(username)"
+  />
+  <div>
+    <div class="flex items-center space-x-2">
+      <a
+        (click)="navigateToProfile(username)"
+        class="cursor-pointer text-blue-500 hover:underline"
+        >{{ name }}</a
+      >
+    </div>
+    <p class="text-gray-700">{{ note }}</p>
+  </div>
+  @if (currentUsername === username) {
+    <div class="absolute right-3">
+      <button
+        type="button"
+        class="mt-5 h-9 rounded-xl bg-red-500 px-4 text-white"
+        (click)="deleteComment()"
+      >
+        X
+      </button>
+    </div>
+  }
+</div>

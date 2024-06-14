@@ -1,46 +1,50 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { CommentService } from '../../../services/comment.service';
 
 @Component({
   selector: 'app-comment',
   standalone: true,
-  template: `
-    <div class="comment border flex items-start space-x-4 p-4">
-      <img
-        [src]="profilePicture"
-        alt="Profile Picture"
-        class="h-10 w-10 cursor-pointer rounded-full object-cover"
-        (click)="navigateToProfile(username)"
-      />
-      <div>
-        <div class="flex items-center space-x-2">
-          <a
-            (click)="navigateToProfile(username)"
-            class="cursor-pointer text-blue-500 hover:underline"
-            >{{ name }}</a
-          >
-        </div>
-        <p class="text-gray-700">{{ note }}</p>
-      </div>
-    </div>
-  `,
-  styles: [
-    `
-      .comment {
-        border-bottom: 1px solid #e2e8f0;
-      }
-    `,
-  ],
+  templateUrl: './comment.component.html',
 })
-export class CommentComponent {
+export class CommentComponent implements OnInit {
   @Input() username!: string;
   @Input() profilePicture!: string;
   @Input() name!: string;
   @Input() note!: string;
+  @Input() recipeId!: number;
+  @Output() refreshComments = new EventEmitter<void>();
 
-  constructor(private router: Router) {}
+  currentUsername: string | null = null;
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private commentService: CommentService,
+  ) {}
+
+  ngOnInit(): void {
+    this.currentUsername = this.authService.getCurrentUsername();
+  }
 
   navigateToProfile(username: string): void {
     this.router.navigate(['/profile', username]);
+  }
+
+  deleteComment(): void {
+    if (this.username && this.recipeId) {
+      this.commentService
+        .deleteComment({ username: this.username, recipeId: this.recipeId })
+        .subscribe(
+          () => {
+            console.log('Comment deleted successfully');
+            this.refreshComments.emit();
+          },
+          (error) => {
+            console.error('Error deleting comment:', error);
+          },
+        );
+    }
   }
 }
