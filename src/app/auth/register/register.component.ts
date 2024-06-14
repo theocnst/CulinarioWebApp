@@ -34,7 +34,7 @@ export class RegisterComponent {
 
     this.authService.register(this.name, this.email, this.password).subscribe({
       next: () => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/recipe-list']);
       },
       error: () => {
         this.errorMessage = 'Registration failed. Please try again.';

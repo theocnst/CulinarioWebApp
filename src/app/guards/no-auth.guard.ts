@@ -11,8 +11,8 @@ export const noAuthGuard: CanActivateFn = (route, state) => {
     map((isAuth) => {
       console.log('No auth guard check:', isAuth);
       if (isAuth) {
-        console.warn('User is authenticated, redirecting to home');
-        router.navigate(['/home']);
+        console.warn('User is authenticated, redirecting to recipe list');
+        router.navigate(['/recipe-list']);
         return false;
       }
       return true;

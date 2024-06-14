@@ -67,9 +67,9 @@ export class NavBarComponent implements OnInit {
     this.closeAllDropdowns(event);
   }
 
-  onHomeClick(): void {
-    console.log('Navigating to home');
-    this.router.navigate(['/home']);
+  onSearchClick(): void {
+    console.log('Navigating to search');
+    this.router.navigate(['/search']);
   }
 
   onRecipeListClick(): void {

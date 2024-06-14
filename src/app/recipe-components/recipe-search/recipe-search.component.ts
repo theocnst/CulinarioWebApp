@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { Recipe, RecipeType, Country } from '../models/recipe.model';
-import { RecipeService } from '../services/recipe.service';
+import { Recipe, RecipeType, Country } from '../../models/recipe.model';
+import { RecipeService } from '../../services/recipe.service';
 import { FormsModule } from '@angular/forms';
-import { RecipeThumbnailComponent } from '../recipe-components/recipe-thumbnail/recipe-thumbnail.component';
+import { RecipeThumbnailComponent } from '../../recipe-components/recipe-thumbnail/recipe-thumbnail.component';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-recipe-search',
   standalone: true,
   imports: [FormsModule, RecipeThumbnailComponent],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+
+  templateUrl: './recipe-search.component.html',
+  styleUrl: './recipe-search.component.css',
 })
-export class HomeComponent implements OnInit {
+export class RecipeSearchComponent implements OnInit {
   recipes: Recipe[] = [];
   filteredRecipes: Recipe[] = [];
   recipeTypes: RecipeType[] = [];

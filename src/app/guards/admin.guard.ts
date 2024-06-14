@@ -18,14 +18,14 @@ export const adminGuard: CanActivateFn = (route, state) => {
         console.log('User is an admin');
         return true;
       } else {
-        console.warn('User is not an admin, redirecting to home');
-        router.navigate(['/home']);
+        console.warn('User is not an admin, redirecting to recipe list');
+        router.navigate(['/recipe-list']);
         return false;
       }
     }),
     catchError((err) => {
       console.error('Error checking admin status', err);
-      router.navigate(['/home']);
+      router.navigate(['/recipe-list']);
       return of(false);
     }),
   );

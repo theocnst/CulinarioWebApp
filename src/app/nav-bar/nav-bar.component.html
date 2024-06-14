@@ -61,21 +61,21 @@
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-4">
             <button
-              routerLink="/home"
-              routerLinkActive="bg-orange-900 text-white"
-              class="rounded-md px-3 py-2 text-lg font-semibold text-gray-100 hover:bg-orange-700 hover:text-white"
-              aria-current="page"
-              (click)="onHomeClick()"
-            >
-              Home
-            </button>
-            <button
               routerLink="/all-recipes"
               routerLinkActive="bg-orange-900 text-white"
               class="rounded-md px-3 py-2 text-lg font-semibold text-gray-100 hover:bg-orange-700 hover:text-white"
               (click)="onRecipeListClick()"
             >
               Recipe List
+            </button>
+            <button
+              routerLink="/search"
+              routerLinkActive="bg-orange-900 text-white"
+              class="rounded-md px-3 py-2 text-lg font-semibold text-gray-100 hover:bg-orange-700 hover:text-white"
+              aria-current="page"
+              (click)="onSearchClick()"
+            >
+              Search
             </button>
             @if (isAdmin) {
               <button
@@ -128,7 +128,7 @@
               <span class="absolute -inset-1.5"></span>
               <span class="sr-only">Open user menu</span>
               <img
-                class="h-8 w-8 rounded-full"
+                class="h-8 w-8 rounded-full object-cover"
                 src="{{ profilePictureURL }}"
                 alt=""
               />
@@ -180,17 +180,17 @@
     <div class="sm:hidden" id="mobile-menu">
       <div class="space-y-1 px-2 pb-3 pt-2">
         <button
-          (click)="onHomeClick()"
-          class="block w-full rounded-md px-3 py-2 text-base font-medium text-gray-100 hover:bg-orange-700 hover:text-white"
-          aria-current="page"
-        >
-          Home
-        </button>
-        <button
           (click)="onRecipeListClick()"
           class="block w-full rounded-md px-3 py-2 text-base font-medium text-gray-100 hover:bg-orange-700 hover:text-white"
         >
           Recipe List
+        </button>
+        <button
+          (click)="onSearchClick()"
+          class="block w-full rounded-md px-3 py-2 text-base font-medium text-gray-100 hover:bg-orange-700 hover:text-white"
+          aria-current="page"
+        >
+          Search
         </button>
         @if (isAdmin) {
           <button

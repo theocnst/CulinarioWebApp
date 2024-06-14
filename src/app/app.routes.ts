@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
-import { HomeComponent } from './home/home.component';
 import { authGuard } from './guards/auth.guard';
 import { noAuthGuard } from './guards/no-auth.guard';
 import { ProfileComponent } from './profile/profile.component';
@@ -10,6 +9,7 @@ import { RecipeFormComponent } from './recipe-components/recipe-form/recipe-form
 import { adminGuard } from './guards/admin.guard';
 import { RecipeListComponent } from './recipe-components/recipe-list/recipe-list.component';
 import { ProfileEditComponent } from './profile-edit/profile-edit.component';
+import { RecipeSearchComponent } from './recipe-components/recipe-search/recipe-search.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [noAuthGuard] },
@@ -18,7 +18,11 @@ export const routes: Routes = [
     component: RegisterComponent,
     canActivate: [noAuthGuard],
   },
-  { path: 'home', component: HomeComponent, canActivate: [authGuard] },
+  {
+    path: 'search',
+    component: RecipeSearchComponent,
+    canActivate: [authGuard],
+  },
   {
     path: 'profile/:username',
     component: ProfileComponent,
@@ -50,5 +54,5 @@ export const routes: Routes = [
     canActivate: [authGuard, adminGuard],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: '/recipe-list', pathMatch: 'full' },
 ];

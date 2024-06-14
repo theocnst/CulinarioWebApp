@@ -39,7 +39,7 @@ export class AuthService {
     console.log('Username stored:', username);
 
     this.updateAuthStatus(true); // Update auth status
-    this.router.navigate(['/home']);
+    this.router.navigate(['/recipe-list']);
   }
 
   login(email: string, password: string): Observable<AuthResponse> {

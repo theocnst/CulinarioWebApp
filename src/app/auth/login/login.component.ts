@@ -33,7 +33,7 @@ export class LoginComponent {
 
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/recipe-list']);
       },
       error: () => {
         this.errorMessage = 'Login failed. Please try again.';
