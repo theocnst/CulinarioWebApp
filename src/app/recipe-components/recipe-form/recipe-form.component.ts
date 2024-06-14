@@ -10,7 +10,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './recipe-form.component.html',
-  styleUrls: ['./recipe-form.component.css'],
 })
 export class RecipeFormComponent implements OnInit {
   recipe: Recipe = {

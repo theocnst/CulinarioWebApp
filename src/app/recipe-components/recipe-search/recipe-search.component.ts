@@ -10,7 +10,6 @@ import { RecipeThumbnailComponent } from '../../recipe-components/recipe-thumbna
   imports: [FormsModule, RecipeThumbnailComponent],
 
   templateUrl: './recipe-search.component.html',
-  styleUrl: './recipe-search.component.css',
 })
 export class RecipeSearchComponent implements OnInit {
   recipes: Recipe[] = [];

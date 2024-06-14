@@ -12,7 +12,6 @@ import { CommentsComponent } from '../recipe-comments/comments/comments.componen
   standalone: true,
   imports: [CommentsComponent],
   templateUrl: './recipe.component.html',
-  styleUrl: './recipe.component.css',
 })
 export class RecipeComponent implements OnInit {
   recipe: Recipe | undefined;

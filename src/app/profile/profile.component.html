@@ -60,7 +60,7 @@
               <div class="flex min-w-0 gap-x-4">
                 @if (friendDetails[friend.username]) {
                   <img
-                    class="h-12 w-12 flex-none rounded-full bg-gray-50"
+                    class="h-12 w-12 flex-none rounded-full bg-gray-50 object-cover"
                     src="{{ friendDetails[friend.username].profilePicture }}"
                     alt=""
                   />
@@ -106,7 +106,7 @@
                 <div class="flex min-w-0 gap-x-4">
                   @if (likedRecipeDetails[recipe.recipeId].image) {
                     <img
-                      class="h-12 w-12 flex-none rounded-full bg-gray-50"
+                      class="h-12 w-12 flex-none rounded-full bg-gray-50 object-cover"
                       [src]="likedRecipeDetails[recipe.recipeId].image"
                       alt=""
                     />

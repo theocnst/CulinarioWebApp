@@ -9,7 +9,6 @@ import { RecipeThumbnailComponent } from '../recipe-thumbnail/recipe-thumbnail.c
   standalone: true,
   imports: [RecipeThumbnailComponent],
   templateUrl: './recipe-list.component.html',
-  styleUrls: ['./recipe-list.component.css'],
 })
 export class RecipeListComponent implements OnInit {
   recipes: Recipe[] = [];

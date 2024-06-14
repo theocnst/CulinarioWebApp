@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
   selector: 'app-comment',
   standalone: true,
   template: `
-    <div class="comment flex items-start space-x-4 p-4">
+    <div class="comment border flex items-start space-x-4 p-4">
       <img
         [src]="profilePicture"
         alt="Profile Picture"

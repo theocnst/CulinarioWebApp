@@ -10,7 +10,6 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './profile-edit.component.html',
-  styleUrls: ['./profile-edit.component.css'],
 })
 export class ProfileEditComponent implements OnInit {
   profile: UserProfile = {

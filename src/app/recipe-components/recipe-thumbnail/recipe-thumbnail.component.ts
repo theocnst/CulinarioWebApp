@@ -9,7 +9,6 @@ import { ProfileService } from '../../services/profile.service';
   standalone: true,
   imports: [],
   templateUrl: './recipe-thumbnail.component.html',
-  styleUrl: './recipe-thumbnail.component.css',
 })
 export class RecipeThumbnailComponent implements OnInit {
   @Input() recipe!: Recipe;

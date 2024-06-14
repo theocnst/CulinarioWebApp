@@ -7,7 +7,6 @@ import { ProfileService } from '../services/profile.service';
   selector: 'app-nav-bar',
   standalone: true,
   templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css'],
 })
 export class NavBarComponent implements OnInit {
   isMobileMenuOpen = false;
