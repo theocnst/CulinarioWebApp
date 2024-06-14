@@ -1,52 +1,57 @@
 <div
-  class="mx-auto max-w-xs cursor-pointer overflow-hidden rounded shadow-lg"
+  class="mx-auto max-w-xs cursor-pointer overflow-hidden rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl"
   (click)="navigateToRecipe()"
 >
-  @if (recipe.image) {
-    <img
-      class="h-96 w-full bg-white object-contain"
-      [src]="recipe.image"
-      alt="Recipe Image"
-    />
-  } @else {
-    <img
-      class="h-96 w-full bg-white object-contain"
-      src="https://cdn-icons-png.flaticon.com/512/2046/2046670.png"
-      alt="Placeholder Image"
-    />
-  }
-  <div class="px-6 py-4">
-    <div class="mb-2 text-xl font-bold">{{ recipe.name }}</div>
+  <div class="flex h-48 w-full items-center justify-center bg-white">
+    @if (recipe.image) {
+      <img
+        class="h-full w-auto rounded-t-lg object-contain"
+        [src]="recipe.image"
+        alt="Recipe Image"
+      />
+    } @else {
+      <img
+        class="h-full w-auto rounded-t-lg object-contain"
+        src="https://cdn-icons-png.flaticon.com/512/2046/2046670.png"
+        alt="Placeholder Image"
+      />
+    }
+  </div>
+  <div class="px-4 py-4">
+    <div class="mb-2 text-lg font-bold text-gray-800">{{ recipe.name }}</div>
     <div class="flex items-center justify-between">
-      <span class="text-yellow-500">
-        @for (star of starArray; track star) {
-          <svg
-            class="inline-block h-5 w-5"
-            [attr.fill]="getStarFill(star)"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <linearGradient id="half-star">
-                <stop offset="50%" stop-color="currentColor" />
-                <stop offset="50%" stop-color="background" />
-              </linearGradient>
-            </defs>
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 2.5l3.094 6.26 6.906 1.004-5 4.864 1.18 6.882L12 17.727l-6.18 3.254L7 14.628 2 9.764l6.906-1.004L12 2.5z"
-            />
-          </svg>
-        }
+      <div class="flex items-center">
+        <span class="text-yellow-500">
+          @for (star of starArray; track star) {
+            <svg
+              class="inline-block h-4 w-4"
+              [attr.fill]="getStarFill(star)"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <linearGradient id="half-star">
+                  <stop offset="50%" stop-color="currentColor" />
+                  <stop offset="50%" stop-color="background" />
+                </linearGradient>
+              </defs>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 2.5l3.094 6.26 6.906 1.004-5 4.864 1.18 6.882L12 17.727l-6.18 3.254L7 14.628 2 9.764l6.906-1.004L12 2.5z"
+              />
+            </svg>
+          }
+        </span>
+      </div>
+      <span class="text-md font-medium text-gray-600">
+        {{ recipe.averageRating?.toFixed(1) || 0 }}
+        <span class="text-sm text-gray-400"
+          >({{ recipe.numberOfRatings }})</span
+        >
       </span>
-      <span class="text-lg font-semibold text-gray-600"
-        >{{ recipe.averageRating?.toFixed(1) || 0 }} ({{
-          recipe.numberOfRatings
-        }})</span
-      >
     </div>
   </div>
 </div>
