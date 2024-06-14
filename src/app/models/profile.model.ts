@@ -21,3 +21,8 @@ export interface UserProfile {
   friends: Friend[];
   likedRecipes: LikedRecipe[];
 }
+
+export interface LikedRecipeOperation {
+  recipeId: number;
+  username: string;
+}

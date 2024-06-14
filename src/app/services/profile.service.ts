@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, map } from 'rxjs';
-import { UserProfile, Friendship } from '../models/profile.model';
+import {
+  UserProfile,
+  Friendship,
+  LikedRecipeOperation,
+} from '../models/profile.model';
 
 @Injectable({
   providedIn: 'root',
@@ -40,5 +44,13 @@ export class ProfileService {
 
   removeFriend(friendship: Friendship): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/removeFriend`, friendship);
+  }
+
+  likeRecipe(operation: LikedRecipeOperation): Observable<any> {
+    return this.http.post(`${this.apiUrl}/LikeRecipe`, operation);
+  }
+
+  unlikeRecipe(operation: LikedRecipeOperation): Observable<any> {
+    return this.http.post(`${this.apiUrl}/UnlikeRecipe`, operation);
   }
 }
