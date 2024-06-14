@@ -3,7 +3,7 @@ export interface Friend {
 }
 
 export interface LikedRecipe {
-  name: string;
+  recipeId: number;
 }
 
 export interface UserProfile {
