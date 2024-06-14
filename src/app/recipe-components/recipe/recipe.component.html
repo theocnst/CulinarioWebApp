@@ -45,7 +45,7 @@
               class="h-8 w-8 text-gray-500"
               fill="none"
               stroke="currentColor"
-              viewBox="0 0 24 24"
+              viewBox="0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -150,6 +150,13 @@
         <li><strong>Sugar:</strong> {{ recipe.nutritionInfo.sugar }} g</li>
       </ul>
     </div>
+  </div>
+  <div
+    class="mx-auto my-10 max-w-2xl overflow-hidden rounded-lg bg-white shadow-md"
+  >
+    @if (recipe.recipeId) {
+      <app-comments [recipeId]="recipe.recipeId"></app-comments>
+    }
   </div>
 }
 

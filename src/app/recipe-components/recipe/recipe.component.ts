@@ -5,11 +5,12 @@ import { RecipeService } from '../../services/recipe.service';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { LikedRecipeOperation } from '../../models/profile.model';
+import { CommentsComponent } from '../recipe-comments/comments/comments.component';
 
 @Component({
   selector: 'app-recipe',
   standalone: true,
-  imports: [],
+  imports: [CommentsComponent],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.css',
 })
