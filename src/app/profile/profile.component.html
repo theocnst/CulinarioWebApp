@@ -2,39 +2,56 @@
   class="mx-auto mb-10 mt-5 max-w-2xl overflow-hidden rounded-lg bg-white p-6 shadow-lg"
 >
   @if (userInfo) {
+    <div class="flex justify-between">
+      @if (userInfo.username !== loggedInUsername) {
+        @if (isFriend) {
+          <button
+            class="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-700"
+            (click)="removeFriend()"
+          >
+            Remove Friend
+          </button>
+        } @else {
+          <button
+            class="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-700"
+            (click)="addFriend()"
+          >
+            Add Friend
+          </button>
+        }
+      }
+    </div>
     <div class="text-center">
       <div class="relative inline-block">
         <img
           src="{{ userInfo.profilePicture }}"
           alt="Profile Picture"
-          class="mx-auto mb-4 h-32 w-32 rounded-full border-4 border-orange-500 object-cover"
+          class="mx-auto mb-4 h-32 w-32 rounded-full border-4 border-orange-500"
         />
       </div>
-      <h2 class="mb-4 text-3xl font-bold text-orange-600">
+      <h2 class="mb-4 text-3xl font-extrabold text-orange-600">
         {{ userInfo.username }}'s Profile
       </h2>
+
       <div class="px-6 text-left">
-        <div class="flex justify-between">
-          <p class="mb-2 mt-2 text-2xl">
-            <span class="font-semibold text-gray-700">Name:</span>
-            {{ userInfo.firstName }}
-            {{ userInfo.lastName }}
-          </p>
-          <p class="text-md mb-2 mt-10">
-            <span class="font-semibold text-gray-700">Date of Birth:</span>
-            {{ userInfo.dateOfBirth }}
-          </p>
-        </div>
+        <p class="mb-2 text-lg">
+          <span class="font-semibold text-gray-700">Name:</span>
+          {{ userInfo.firstName }} {{ userInfo.lastName }}
+        </p>
         <p class="mb-2 text-lg">
           <span class="font-semibold text-gray-700">Description:</span>
         </p>
         <p class="mb-2 text-lg">
           <span class="ml-5 text-gray-700">{{ userInfo.description }}</span>
         </p>
+        <p class="mb-2 text-right text-lg">
+          <span class="font-semibold text-gray-700">Date of Birth:</span>
+          {{ userInfo.dateOfBirth }}
+        </p>
       </div>
-      <div class="mt-6 px-6 text-left">
+      <div class="mt-6 border-t-2 border-orange-200 px-6 text-left">
         <h3 class="mb-2 text-2xl font-semibold text-orange-600">Friends</h3>
-        <ul class="cursor-pointer divide-y divide-gray-100 border-b pb-4">
+        <ul class="cursor-pointer divide-y divide-gray-100">
           @for (friend of userInfo.friends; track friend) {
             <li
               class="flex justify-between gap-x-6 py-5"
@@ -75,7 +92,7 @@
           }
         </ul>
       </div>
-      <div class="mt-6 px-6 text-left">
+      <div class="mt-6 border-t-2 border-orange-200 px-6 text-left">
         <h3 class="mb-2 text-2xl font-semibold text-orange-600">
           Liked Recipes
         </h3>
@@ -89,7 +106,7 @@
                 <div class="flex min-w-0 gap-x-4">
                   @if (likedRecipeDetails[recipe.recipeId].image) {
                     <img
-                      class="h-12 w-12 flex-none rounded-full bg-gray-50 object-cover"
+                      class="h-12 w-12 flex-none rounded-full bg-gray-50"
                       [src]="likedRecipeDetails[recipe.recipeId].image"
                       alt=""
                     />

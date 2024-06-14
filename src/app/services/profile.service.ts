@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, map } from 'rxjs';
-import { UserProfile } from '../models/profile.model';
+import { UserProfile, Friendship } from '../models/profile.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +32,13 @@ export class ProfileService {
 
   updateProfilePicture(url: string): void {
     this.profilePictureSubject.next(url);
+  }
+
+  addFriend(friendship: Friendship): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/addFriend`, friendship);
+  }
+
+  removeFriend(friendship: Friendship): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/removeFriend`, friendship);
   }
 }

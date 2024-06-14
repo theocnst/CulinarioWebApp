@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
 import { RecipeService } from '../services/recipe.service';
-import { UserProfile, Friend, LikedRecipe } from '../models/profile.model';
+import { UserProfile, Friendship } from '../models/profile.model';
 import { Recipe } from '../models/recipe.model';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,25 +14,41 @@ import { Recipe } from '../models/recipe.model';
 })
 export class ProfileComponent implements OnInit {
   username: string | null = null;
+  loggedInUsername: string | null = null;
   userInfo: UserProfile | null = null;
+  loggedInUserInfo: UserProfile | null = null; // To store the logged-in user's info
   friendDetails: { [key: string]: any } = {};
   likedRecipeDetails: { [key: number]: Recipe } = {};
   starArray: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  isFriend: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private profileService: ProfileService,
     private recipeService: RecipeService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      this.username = params.get('username');
-      if (this.username) {
-        this.loadUserProfile(this.username);
-      }
-    });
+    this.loggedInUsername = this.authService.getCurrentUsername();
+    if (this.loggedInUsername) {
+      this.profileService.getUserProfile(this.loggedInUsername).subscribe({
+        next: (data) => {
+          this.loggedInUserInfo = data;
+          this.route.paramMap.subscribe((params) => {
+            this.username = params.get('username');
+            if (this.username) {
+              this.loadUserProfile(this.username);
+              this.checkIfFriend();
+            }
+          });
+        },
+        error: (err) => {
+          console.error('Error loading logged-in user profile', err);
+        },
+      });
+    }
   }
 
   loadUserProfile(username: string): void {
@@ -112,6 +129,52 @@ export class ProfileComponent implements OnInit {
       return 'url(#half)';
     } else {
       return 'none';
+    }
+  }
+
+  checkIfFriend(): void {
+    if (this.loggedInUserInfo) {
+      this.isFriend = this.loggedInUserInfo.friends.some(
+        (friend) => friend.username === this.username,
+      );
+    }
+  }
+
+  addFriend(): void {
+    if (this.userInfo && this.loggedInUsername) {
+      const friendship: Friendship = {
+        username: this.loggedInUsername,
+        friendUsername: this.userInfo.username,
+      };
+      this.profileService.addFriend(friendship).subscribe({
+        next: (data) => {
+          this.isFriend = true;
+          this.loadUserProfile(this.userInfo?.username ?? '');
+          console.log('Friend added successfully:', data);
+        },
+        error: (err) => {
+          console.error('Error adding friend', err);
+        },
+      });
+    }
+  }
+
+  removeFriend(): void {
+    if (this.userInfo && this.loggedInUsername) {
+      const friendship: Friendship = {
+        username: this.loggedInUsername,
+        friendUsername: this.userInfo.username,
+      };
+      this.profileService.removeFriend(friendship).subscribe({
+        next: (data) => {
+          this.isFriend = false;
+          this.loadUserProfile(this.userInfo?.username ?? '');
+          console.log('Friend removed successfully:', data);
+        },
+        error: (err) => {
+          console.error('Error removing friend', err);
+        },
+      });
     }
   }
 }
