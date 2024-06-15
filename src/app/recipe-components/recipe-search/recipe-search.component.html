@@ -23,7 +23,6 @@
           [(ngModel)]="filters.country"
           (ngModelChange)="applyFilters()"
         >
-          <option value="">All</option>
           @for (country of countries; track country) {
             <option [value]="country.countryName">
               {{ country.countryName }}
@@ -38,7 +37,6 @@
           [(ngModel)]="filters.recipeType"
           (ngModelChange)="applyFilters()"
         >
-          <option value="">All</option>
           @for (type of recipeTypes; track type) {
             <option [value]="type.name">{{ type.name }}</option>
           }

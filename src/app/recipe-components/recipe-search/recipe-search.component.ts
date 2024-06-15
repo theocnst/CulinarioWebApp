@@ -8,21 +8,20 @@ import { RecipeThumbnailComponent } from '../../recipe-components/recipe-thumbna
   selector: 'app-recipe-search',
   standalone: true,
   imports: [FormsModule, RecipeThumbnailComponent],
-
   templateUrl: './recipe-search.component.html',
 })
 export class RecipeSearchComponent implements OnInit {
   recipes: Recipe[] = [];
   filteredRecipes: Recipe[] = [];
-  recipeTypes: RecipeType[] = [];
-  countries: Country[] = [];
+  recipeTypes: RecipeType[] = [{ name: 'None' }, { name: 'All' }];
+  countries: Country[] = [{ countryName: 'None' }, { countryName: 'All' }];
 
   showFilters = false;
 
   filters = {
     name: '',
-    country: '',
-    recipeType: '',
+    country: 'None',
+    recipeType: 'None',
     totalTime: null,
     admin: '',
     averageRating: null,
@@ -44,7 +43,7 @@ export class RecipeSearchComponent implements OnInit {
 
     this.recipeService.getRecipeTypes().subscribe(
       (data: RecipeType[]) => {
-        this.recipeTypes = data;
+        this.recipeTypes.push(...data);
       },
       (error) => {
         console.error('Error fetching recipe types:', error);
@@ -53,7 +52,7 @@ export class RecipeSearchComponent implements OnInit {
 
     this.recipeService.getCountries().subscribe(
       (data: Country[]) => {
-        this.countries = data;
+        this.countries.push(...data);
       },
       (error) => {
         console.error('Error fetching countries:', error);
@@ -68,9 +67,12 @@ export class RecipeSearchComponent implements OnInit {
           !this.filters.name ||
           recipe.name.toLowerCase().includes(this.filters.name.toLowerCase());
         const matchesCountry =
-          !this.filters.country || recipe.countryName === this.filters.country;
+          this.filters.country === 'None' ||
+          this.filters.country === 'All' ||
+          recipe.countryName === this.filters.country;
         const matchesRecipeType =
-          !this.filters.recipeType ||
+          this.filters.recipeType === 'None' ||
+          this.filters.recipeType === 'All' ||
           recipe.recipeType.name === this.filters.recipeType;
         const matchesTotalTime =
           !this.filters.totalTime || recipe.totalTime <= this.filters.totalTime;
@@ -103,7 +105,7 @@ export class RecipeSearchComponent implements OnInit {
 
   hasFilters(): boolean {
     return Object.values(this.filters).some(
-      (value) => value !== '' && value !== null,
+      (value) => value !== '' && value !== null && value !== 'None',
     );
   }
 

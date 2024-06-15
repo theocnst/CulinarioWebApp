@@ -9,14 +9,14 @@
             class="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-700"
             (click)="removeFriend()"
           >
-            Remove Friend
+            Unfollow
           </button>
         } @else {
           <button
             class="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-700"
             (click)="addFriend()"
           >
-            Add Friend
+            Follow
           </button>
         }
       }
@@ -50,7 +50,7 @@
         </p>
       </div>
       <div class="mt-6 border-t-2 border-orange-200 px-6 text-left">
-        <h3 class="mb-2 text-2xl font-semibold text-orange-600">Friends</h3>
+        <h3 class="mb-2 text-2xl font-semibold text-orange-600">Follows:</h3>
         <ul class="cursor-pointer divide-y divide-gray-100">
           @for (friend of userInfo.friends; track friend) {
             <li
