@@ -17,9 +17,26 @@ export class RecipeValidationService {
           !recipe.image ||
           !recipe.description ||
           !recipe.countryName ||
-          !recipe.recipeType.name
+          !recipe.recipeType.name ||
+          !recipe.servings ||
+          !recipe.prepTime ||
+          !recipe.cookTime ||
+          !recipe.totalTime
         ) {
-          this.errorMessage = 'Please fill out all required fields in Step 1.';
+          this.errorMessage =
+            'Please fill out all required fields in Step 1.<br>';
+          if (!Number.isInteger(recipe.servings)) {
+            this.errorMessage += ' Servings must be an integer.';
+          }
+          if (!Number.isInteger(recipe.prepTime)) {
+            this.errorMessage += ' Prep time must be an integer.';
+          }
+          if (!Number.isInteger(recipe.cookTime)) {
+            this.errorMessage += ' Cook time must be an integer.';
+          }
+          if (!Number.isInteger(recipe.totalTime)) {
+            this.errorMessage += ' Total time must be an integer.';
+          }
           return false;
         }
         break;

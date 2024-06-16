@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gray-100 p-4 sm:p-12">
+<div class="just flex min-h-screen bg-gray-100 p-4 sm:p-12">
   <div
     class="mx-auto max-w-lg border-0 bg-white px-6 py-12 shadow-lg sm:rounded-3xl"
   >
@@ -38,6 +38,39 @@
                 >Image URL</label
               >
             </div>
+            <div class="mb-4 flex items-center justify-center">
+              <label
+                class="flex cursor-pointer items-center rounded-lg bg-blue-500 px-3 py-2 tracking-wide text-white shadow-md hover:bg-blue-600"
+              >
+                <svg
+                  class="h-5 w-5"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M16.88 10.21a.75.75 0 0 1-.13.99c-.29.22-.66.33-1.05.33h-2.13V18a1.5 1.5 0 0 1-1.5 1.5H7a1.5 1.5 0 0 1-1.5-1.5v-6.47H3.37a1.25 1.25 0 0 1-.95-2.06l6.04-6.4a1.25 1.25 0 0 1 1.81 0l6.04 6.4c.33.35.5.81.5 1.27v.02z"
+                  />
+                </svg>
+                <span class="ml-2 text-sm">Select file</span>
+                <input
+                  type="file"
+                  class="hidden"
+                  (change)="onFileSelected($event)"
+                />
+              </label>
+            </div>
+            <div class="mb-4 flex items-center justify-center">
+              <div
+                class="flex max-h-96 max-w-96 items-center justify-center overflow-hidden rounded-3xl"
+              >
+                <img
+                  class="h-auto max-h-full w-auto max-w-full rounded-3xl object-contain"
+                  [src]="recipe.image"
+                  alt="Recipe Image"
+                />
+              </div>
+            </div>
             <div class="mb-4">
               <div class="mb-2 flex space-x-4">
                 <label
@@ -62,6 +95,7 @@
                   class="w-1/4 rounded border p-2 text-gray-800"
                   type="number"
                   [(ngModel)]="recipe.prepTime"
+                  (ngModelChange)="calculateTotalTime()"
                   name="prepTime"
                   required
                 />
@@ -69,6 +103,7 @@
                   class="w-1/4 rounded border p-2 text-gray-800"
                   type="number"
                   [(ngModel)]="recipe.cookTime"
+                  (ngModelChange)="calculateTotalTime()"
                   name="cookTime"
                   required
                 />
@@ -77,7 +112,7 @@
                   type="number"
                   [(ngModel)]="recipe.totalTime"
                   name="totalTime"
-                  required
+                  readonly
                 />
                 <input
                   class="w-1/4 rounded border p-2 text-gray-800"

@@ -4,6 +4,7 @@ import { RecipeService } from '../../services/recipe.service';
 import { RecipeValidationService } from '../../services/recipe-validation.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CloudinaryService } from '../../services/upload.service';
 
 @Component({
   selector: 'app-recipe-form',
@@ -39,12 +40,14 @@ export class RecipeFormComponent implements OnInit {
   currentStep: number = 1;
   isEditing: boolean = false;
   errorMessage: string = '';
+  imageUrl: string = '';
 
   constructor(
     private recipeService: RecipeService,
     private validationService: RecipeValidationService,
     private router: Router,
     private route: ActivatedRoute,
+    private cloudinaryService: CloudinaryService,
   ) {}
 
   ngOnInit(): void {
@@ -101,6 +104,27 @@ export class RecipeFormComponent implements OnInit {
 
   prevStep(): void {
     this.currentStep--;
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input?.files?.[0]) {
+      const file = input.files[0];
+      this.cloudinaryService.uploadImage(file).subscribe(
+        (response: any) => {
+          this.imageUrl = response.secure_url;
+          this.recipe.image = this.imageUrl;
+        },
+        (error) => {
+          console.error('Error uploading image:', error);
+          this.errorMessage = 'Error uploading image';
+        },
+      );
+    }
+  }
+
+  calculateTotalTime(): void {
+    this.recipe.totalTime = this.recipe.prepTime + this.recipe.cookTime;
   }
 
   onSubmit(): void {
