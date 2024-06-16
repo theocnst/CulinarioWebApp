@@ -4,11 +4,13 @@ import { ProfileService } from '../services/profile.service';
 import { AuthService } from '../services/auth.service';
 import { UserProfile } from '../models/profile.model';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { CloudinaryService } from '../services/upload.service';
 
 @Component({
   selector: 'app-profile-edit',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './profile-edit.component.html',
 })
 export class ProfileEditComponent implements OnInit {
@@ -24,12 +26,14 @@ export class ProfileEditComponent implements OnInit {
   };
   username: string | null = null;
   errorMessage: string | null = null;
+  imageUrl: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private profileService: ProfileService,
     private authService: AuthService,
+    private cloudinaryService: CloudinaryService,
   ) {}
 
   ngOnInit(): void {
@@ -67,6 +71,18 @@ export class ProfileEditComponent implements OnInit {
 
   onProfilePictureChange(url: string): void {
     this.profileService.updateProfilePicture(url);
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input?.files?.[0]) {
+      const file = input.files[0];
+      this.cloudinaryService.uploadImage(file).subscribe((response: any) => {
+        this.imageUrl = response.secure_url;
+        this.profile.profilePicture = this.imageUrl;
+        this.onProfilePictureChange(this.imageUrl);
+      });
+    }
   }
 
   onSubmit(): void {

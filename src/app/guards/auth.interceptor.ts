@@ -17,6 +17,11 @@ export const authInterceptor: HttpInterceptorFn = (
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  // Bypass interceptor for Cloudinary URLs
+  if (req.url.includes('cloudinary.com')) {
+    return next(req);
+  }
+
   const token = localStorage.getItem('jwt'); // Get token from local storage
   if (token) {
     console.debug('Adding token to headers:', token);

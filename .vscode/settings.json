@@ -2,5 +2,7 @@
   "editor.fastScrollSensitivity": 1,
   "workbench.list.fastScrollSensitivity": 1,
   "terminal.integrated.fastScrollSensitivity": 1,
-  "appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"]
+  "appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"],
+  "appService.defaultWebAppToDeploy": "/subscriptions/2912307f-5e54-4cb0-aef2-000cf4af55a0/resourceGroups/CulinarioResourceGroup/providers/Microsoft.Web/sites/CulinarioWebApp",
+  "appService.deploySubpath": "dist\\culinario-web-app\\browser"
 }
