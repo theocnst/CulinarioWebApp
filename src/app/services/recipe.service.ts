@@ -2,15 +2,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Country, Rating, Recipe, RecipeType } from '../models/recipe.model';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecipeService {
-  private apiUrl = 'https://localhost:7053/api/Recipe';
+  private apiUrl: string;
 
-  constructor(private http: HttpClient) {}
-
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService,
+  ) {
+    this.apiUrl = this.configService.getConfig().apiUrl + '/Recipe';
+  }
   getRecipes(): Observable<Recipe[]> {
     return this.http.get<Recipe[]>(`${this.apiUrl}/all`);
   }

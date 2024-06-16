@@ -71,6 +71,8 @@
           type="date"
           name="dateOfBirth"
           placeholder="YYYY-MM-DD"
+          min="1980-01-01"
+          max="2024-12-31"
           required
           class="mt-0 block w-full appearance-none border-0 border-b-2 border-gray-200 bg-transparent px-0 pb-2 pt-3 focus:border-black focus:outline-none focus:ring-0"
           [(ngModel)]="profile.dateOfBirth"

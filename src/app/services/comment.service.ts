@@ -6,14 +6,20 @@ import {
   CreateCommentDto,
   DeleteCommentDto,
 } from '../models/comment.model';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommentService {
-  private apiUrl = 'https://localhost:7053/api/Comment';
+  private apiUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService,
+  ) {
+    this.apiUrl = this.configService.getConfig().apiUrl + '/Comment';
+  }
 
   getComments(recipeId: number): Observable<CommentDto[]> {
     return this.http.get<CommentDto[]>(`${this.apiUrl}/${recipeId}`);

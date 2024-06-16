@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
+import { ConfigService } from './config.service';
 
 interface AuthResponse {
   token: string;
@@ -14,14 +15,17 @@ interface AuthResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:7053/api/UserCredentials';
+  private apiUrl: string;
   private authStatusSubject = new BehaviorSubject<boolean>(this.hasToken());
   authStatus = this.authStatusSubject.asObservable();
 
   constructor(
     private http: HttpClient,
     private router: Router,
-  ) {}
+    private configService: ConfigService,
+  ) {
+    this.apiUrl = this.configService.getConfig().apiUrl + '/UserCredentials';
+  }
 
   private hasToken(): boolean {
     return !!localStorage.getItem('jwt');

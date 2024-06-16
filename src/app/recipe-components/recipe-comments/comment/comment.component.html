@@ -15,7 +15,7 @@
     </div>
     <p class="text-gray-700">{{ note }}</p>
   </div>
-  @if (currentUsername === username) {
+  @if (currentUsername === username || isAdmin) {
     <div class="absolute right-3">
       <button
         type="button"

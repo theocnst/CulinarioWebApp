@@ -1,5 +1,6 @@
 {
   "editor.fastScrollSensitivity": 1,
   "workbench.list.fastScrollSensitivity": 1,
-  "terminal.integrated.fastScrollSensitivity": 1
+  "terminal.integrated.fastScrollSensitivity": 1,
+  "appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"]
 }

@@ -16,6 +16,7 @@ export class CommentComponent implements OnInit {
   @Input() recipeId!: number;
   @Output() refreshComments = new EventEmitter<void>();
 
+  isAdmin = this.authService.isAdmin();
   currentUsername: string | null = null;
 
   constructor(

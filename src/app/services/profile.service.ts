@@ -6,16 +6,23 @@ import {
   Friendship,
   LikedRecipeOperation,
 } from '../models/profile.model';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private apiUrl = 'https://localhost:7053/api/UserProfile';
+  private apiUrl: string;
+
   private profilePictureSubject = new BehaviorSubject<string | null>(null);
   profilePicture$ = this.profilePictureSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService,
+  ) {
+    this.apiUrl = this.configService.getConfig().apiUrl + '/UserProfile';
+  }
 
   getUserProfile(username: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${username}/details`);
