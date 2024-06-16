@@ -132,4 +132,12 @@ export class AuthService {
     console.log(`isAdmin: User has admin role: ${isAdmin}`);
     return isAdmin;
   }
+
+  checkUsername(username: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/check-username/${username}`);
+  }
+
+  checkEmail(email: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/check-email/${email}`);
+  }
 }

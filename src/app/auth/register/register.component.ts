@@ -27,7 +27,13 @@ export class RegisterComponent {
     }
 
     if (this.name.length < 6) {
-      this.errorMessage = 'Name must be at least 6 characters long';
+      this.errorMessage = 'Username must be at least 6 characters long';
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9]*$/.test(this.name)) {
+      this.errorMessage =
+        'Username must not contain special characters or spaces';
       return;
     }
 
@@ -36,9 +42,34 @@ export class RegisterComponent {
       return;
     }
 
-    this.authService.register(this.name, this.email, this.password).subscribe({
-      next: () => {
-        this.router.navigate(['/recipe-list']);
+    this.authService.checkEmail(this.email).subscribe({
+      next: (emailTaken) => {
+        if (emailTaken) {
+          this.errorMessage = 'Email is already taken';
+        } else {
+          this.authService.checkUsername(this.name).subscribe({
+            next: (usernameTaken) => {
+              if (usernameTaken) {
+                this.errorMessage = 'Username is already taken';
+              } else {
+                this.authService
+                  .register(this.name, this.email, this.password)
+                  .subscribe({
+                    next: () => {
+                      this.router.navigate(['/recipe-list']);
+                    },
+                    error: () => {
+                      this.errorMessage =
+                        'Registration failed. Please try again.';
+                    },
+                  });
+              }
+            },
+            error: () => {
+              this.errorMessage = 'Registration failed. Please try again.';
+            },
+          });
+        }
       },
       error: () => {
         this.errorMessage = 'Registration failed. Please try again.';
