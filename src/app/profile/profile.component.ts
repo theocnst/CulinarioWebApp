@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed, effect, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
 import { RecipeService } from '../services/recipe.service';
-import { UserProfile, Friendship } from '../models/profile.model';
+import { UserProfile, Friendship, Friend } from '../models/profile.model';
 import { Recipe } from '../models/recipe.model';
 import { AuthService } from '../services/auth.service';
 
@@ -12,15 +12,29 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './profile.component.html',
 })
 export class ProfileComponent implements OnInit {
-  username: string | null = null;
-  loggedInUsername: string | null = null;
-  userInfo: UserProfile | null = null;
-  loggedInUserInfo: UserProfile | null = null; // To store the logged-in user's info
-  friendDetails: { [key: string]: any } = {};
-  likedRecipeDetails: { [key: number]: Recipe } = {};
+  username = signal<string | null>(null);
+  loggedInUsername = signal<string>('');
+  userInfo = signal<UserProfile | null>(null);
+  loggedInUserInfo = signal<UserProfile | null>(null);
+  friendDetails = signal<{ [key: string]: any }>({});
+  likedRecipeDetails = signal<{ [key: number]: Recipe }>({});
   starArray: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  isFriend: boolean = false;
-  isLoading: boolean = true;
+  isLoading = signal<boolean>(true);
+
+  isFriend = computed(() => {
+    console.log(
+      'Checking if friend:',
+      this.loggedInUserInfo(),
+      this.username(),
+    );
+    const loggedInUser = this.loggedInUserInfo();
+    const currentUsername = this.username();
+    return loggedInUser
+      ? loggedInUser.friends.some(
+          (friend) => friend.username === currentUsername,
+        )
+      : false;
+  });
 
   constructor(
     private route: ActivatedRoute,
@@ -28,57 +42,70 @@ export class ProfileComponent implements OnInit {
     private profileService: ProfileService,
     private recipeService: RecipeService,
     private authService: AuthService,
-  ) {}
+  ) {
+    effect(() => {
+      const loggedInUser = this.loggedInUserInfo();
+      const currentUsername = this.username();
+      if (loggedInUser && currentUsername) {
+        console.log('Effect triggered: Updating isFriend');
+        //this.isFriend = loggedInUser.friends.some(friend => friend.username === currentUsername);
+      }
+    });
+  }
 
   ngOnInit(): void {
-    this.loggedInUsername = this.authService.getCurrentUsername();
-    if (this.loggedInUsername) {
-      this.profileService.getUserProfile(this.loggedInUsername).subscribe({
+    const currentUsername = this.authService.getCurrentUsername();
+    if (currentUsername) {
+      this.loggedInUsername.set(currentUsername);
+      this.profileService.getUserProfile(currentUsername).subscribe({
         next: (data) => {
-          this.loggedInUserInfo = data;
+          this.loggedInUserInfo.set(data);
           this.route.paramMap.subscribe((params) => {
-            this.username = params.get('username');
-            if (this.username) {
-              this.loadUserProfile(this.username);
-              this.checkIfFriend();
+            this.username.set(params.get('username'));
+            if (this.username()) {
+              this.loadUserProfile(this.username()!);
             }
           });
         },
         error: (err) => {
           console.error('Error loading logged-in user profile', err);
-          this.isLoading = false;
         },
       });
+    } else {
+      throw new Error('No current username found');
     }
   }
 
   loadUserProfile(username: string): void {
     this.profileService.getUserProfile(username).subscribe({
       next: (data) => {
-        this.userInfo = data;
-        this.isLoading = false;
-        if (this.userInfo && this.userInfo.dateOfBirth) {
-          this.userInfo.dateOfBirth = this.formatDate(
-            this.userInfo.dateOfBirth,
+        this.userInfo.set(data);
+        this.isLoading.set(false);
+        if (this.userInfo() && this.userInfo()!.dateOfBirth) {
+          this.userInfo()!.dateOfBirth = this.formatDate(
+            this.userInfo()!.dateOfBirth,
           );
         }
         this.loadFriendsDetails();
         this.loadLikedRecipeDetails();
-        console.log('User info loaded successfully:', this.userInfo);
+        console.log('User info loaded successfully:', this.userInfo());
       },
       error: (err) => {
         console.error('Error loading user profile', err);
-        this.isLoading = false;
+        this.isLoading.set(false);
       },
     });
   }
 
   loadFriendsDetails(): void {
-    if (this.userInfo && this.userInfo.friends) {
-      this.userInfo.friends.forEach((friend) => {
+    if (this.userInfo() && this.userInfo()!.friends) {
+      this.userInfo()!.friends.forEach((friend) => {
         this.profileService.getUserProfile(friend.username).subscribe({
           next: (data) => {
-            this.friendDetails[friend.username] = data;
+            this.friendDetails.update((details) => {
+              details[friend.username] = data;
+              return details;
+            });
             console.log('Friend profile loaded:', data);
           },
           error: (err) => {
@@ -90,12 +117,15 @@ export class ProfileComponent implements OnInit {
   }
 
   loadLikedRecipeDetails(): void {
-    if (this.userInfo && this.userInfo.likedRecipes) {
-      this.userInfo.likedRecipes.forEach((recipe) => {
+    if (this.userInfo() && this.userInfo()!.likedRecipes) {
+      this.userInfo()!.likedRecipes.forEach((recipe) => {
         console.log('Loading recipe with ID:', recipe.recipeId);
         this.recipeService.getRecipeById(recipe.recipeId).subscribe({
           next: (data) => {
-            this.likedRecipeDetails[recipe.recipeId] = data;
+            this.likedRecipeDetails.update((details) => {
+              details[recipe.recipeId] = data;
+              return details;
+            });
             console.log('Liked recipe loaded:', data);
           },
           error: (err) => {
@@ -135,47 +165,56 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  checkIfFriend(): void {
-    if (this.loggedInUserInfo) {
-      this.isFriend = this.loggedInUserInfo.friends.some(
-        (friend) => friend.username === this.username,
-      );
-    }
-  }
-
   addFriend(): void {
-    if (this.userInfo && this.loggedInUsername) {
+    if (this.userInfo() && this.loggedInUsername()) {
+      const updatedUserInfo = Object.assign({}, this.loggedInUserInfo());
+      const newFriend: Friend = { username: this.userInfo()!.username };
+      updatedUserInfo.friends.push(newFriend);
+
+      const previousUserInfo = this.loggedInUserInfo(); // Save the previous state
+      this.loggedInUserInfo.set(updatedUserInfo);
+
       const friendship: Friendship = {
-        username: this.loggedInUsername,
-        friendUsername: this.userInfo.username,
+        username: this.loggedInUsername(),
+        friendUsername: this.userInfo()!.username,
       };
+
       this.profileService.addFriend(friendship).subscribe({
         next: (data) => {
-          this.isFriend = true;
-          this.loadUserProfile(this.userInfo?.username ?? '');
           console.log('Friend added successfully:', data);
         },
         error: (err) => {
           console.error('Error adding friend', err);
+          // Rollback changes in case of error
+          this.loggedInUserInfo.set(previousUserInfo);
         },
       });
     }
   }
 
   removeFriend(): void {
-    if (this.userInfo && this.loggedInUsername) {
+    if (this.userInfo() && this.loggedInUsername()) {
+      const updatedUserInfo = Object.assign({}, this.loggedInUserInfo());
+      updatedUserInfo.friends = updatedUserInfo.friends.filter(
+        (friend) => friend.username !== this.userInfo()!.username,
+      );
+
+      const previousUserInfo = this.loggedInUserInfo(); // Save the previous state
+      this.loggedInUserInfo.set(updatedUserInfo);
+
       const friendship: Friendship = {
-        username: this.loggedInUsername,
-        friendUsername: this.userInfo.username,
+        username: this.loggedInUsername(),
+        friendUsername: this.userInfo()!.username,
       };
+
       this.profileService.removeFriend(friendship).subscribe({
         next: (data) => {
-          this.isFriend = false;
-          this.loadUserProfile(this.userInfo?.username ?? '');
           console.log('Friend removed successfully:', data);
         },
         error: (err) => {
           console.error('Error removing friend', err);
+          // Rollback changes in case of error
+          this.loggedInUserInfo.set(previousUserInfo);
         },
       });
     }

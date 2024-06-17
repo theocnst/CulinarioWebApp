@@ -24,7 +24,7 @@ export const authInterceptor: HttpInterceptorFn = (
 
   const token = localStorage.getItem('jwt'); // Get token from local storage
   if (token) {
-    console.debug('Adding token to headers:', token);
+    //console.debug('Adding token to headers:', token);
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,

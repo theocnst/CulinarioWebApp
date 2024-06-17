@@ -37,11 +37,6 @@ export class AuthService {
     localStorage.setItem('jwt', response.token); // Store token in local storage
     console.log('JWT token stored:', response.token);
 
-    const decodedToken: any = jwtDecode(response.token);
-    const username = decodedToken.username; // Extract username from token
-    localStorage.setItem('username', username); // Store username
-    console.log('Username stored:', username);
-
     this.updateAuthStatus(true); // Update auth status
     this.router.navigate(['/recipe-list']);
   }
@@ -114,22 +109,32 @@ export class AuthService {
   }
 
   getCurrentUsername(): string | null {
-    return localStorage.getItem('username');
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken.username || null;
+      } catch (error) {
+        console.error('AuthService: Error decoding token', error);
+        return null;
+      }
+    }
+    return null;
   }
 
   isAdmin(): boolean {
     const token = localStorage.getItem('jwt');
     if (!token) {
-      console.log('isAdmin: No token found in local storage');
+      console.log('AuthService: No token found in local storage');
       return false;
     }
 
-    console.log('isAdmin: Token found, decoding token');
+    console.log('AuthService: Token found, decoding token');
     const decodedToken: any = jwtDecode(token);
-    console.log('Decoded token:', decodedToken);
+    //console.log('Decoded token:', decodedToken);
 
     const isAdmin = decodedToken?.role === 'Admin';
-    console.log(`isAdmin: User has admin role: ${isAdmin}`);
+    console.log(`AuthService: User has admin role: ${isAdmin}`);
     return isAdmin;
   }
 
