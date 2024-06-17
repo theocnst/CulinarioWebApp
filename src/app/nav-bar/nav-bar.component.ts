@@ -55,10 +55,10 @@ export class NavBarComponent implements OnInit {
     this.isProfileDropdownOpen = !this.isProfileDropdownOpen;
   }
 
-  closeAllDropdowns(event: MouseEvent): void {
+  closeAllDropdowns(event?: MouseEvent): void {
     console.log('Closing all dropdowns');
-    const target = event.target as HTMLElement;
-    if (!target.closest('#user-menu-button')) {
+    const target = event?.target as HTMLElement;
+    if (!target?.closest('#user-menu-button')) {
       this.isProfileDropdownOpen = false;
     }
     this.isMobileMenuOpen = false;
@@ -75,7 +75,7 @@ export class NavBarComponent implements OnInit {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     if (scrollTop > this.lastScrollTop) {
       this.isNavVisible = false;
-      this.isMobileMenuOpen = false;
+      this.closeAllDropdowns();
     } else {
       this.isNavVisible = true;
     }
