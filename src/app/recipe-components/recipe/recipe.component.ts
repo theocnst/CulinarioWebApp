@@ -22,6 +22,7 @@ export class RecipeComponent implements OnInit {
   loggedInUsername: string | null = null;
   likedRecipeDetails: { [key: number]: Recipe } = {};
   currentRecipeId: number | undefined;
+  isLoading: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,10 +42,12 @@ export class RecipeComponent implements OnInit {
         this.recipeService.getRecipeById(this.currentRecipeId).subscribe(
           (data: Recipe) => {
             this.recipe = data;
+            this.isLoading = false;
             console.log('Recipe fetched successfully:', data);
           },
           (error) => {
             console.error('Error fetching recipe:', error);
+            this.isLoading = false;
           },
         );
       }

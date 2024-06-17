@@ -1,4 +1,8 @@
-@if (recipe) {
+@if (isLoading) {
+  <div class="text-center">
+    <p class="text-lg text-gray-600">Loading recipe...</p>
+  </div>
+} @else if (recipe) {
   <div
     class="mx-auto mt-20 max-w-2xl overflow-hidden rounded-lg bg-white shadow-md"
   >
@@ -158,14 +162,12 @@
       <app-comments [recipeId]="recipe.recipeId"></app-comments>
     }
   </div>
-}
-
-@if (!recipe) {
+} @else if (!recipe) {
   <div
     class="mx-auto my-10 max-w-3xl overflow-hidden rounded-lg bg-white shadow-md"
   >
-    <div class="p-4 text-center">
-      <p>Loading recipe...</p>
+    <div class="p-4 text-center text-lg">
+      <p>Recipe does not exist.</p>
     </div>
   </div>
 }
