@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   UserProfile,
   Friendship,
   LikedRecipeOperation,
 } from '../models/profile.model';
 import { ConfigService } from './config.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +15,7 @@ import { ConfigService } from './config.service';
 export class ProfileService {
   private apiUrl: string;
 
-  private profilePictureSubject = new BehaviorSubject<string | null>(null);
-  profilePicture$ = this.profilePictureSubject.asObservable();
+  profilePicture = signal<string>('');
 
   constructor(
     private http: HttpClient,
@@ -28,12 +28,6 @@ export class ProfileService {
     return this.http.get<any>(`${this.apiUrl}/${username}/details`);
   }
 
-  getUserProfilePicture(username: string): Observable<string> {
-    return this.http
-      .get<any>(`${this.apiUrl}/${username}/details`)
-      .pipe(map((data: any) => data.profilePicture));
-  }
-
   updateUserProfile(profile: UserProfile): Observable<UserProfile> {
     return this.http.put<UserProfile>(
       `${this.apiUrl}/${profile.username}`,
@@ -42,7 +36,7 @@ export class ProfileService {
   }
 
   updateProfilePicture(url: string): void {
-    this.profilePictureSubject.next(url);
+    this.profilePicture.set(url);
   }
 
   addFriend(friendship: Friendship): Observable<any> {
@@ -59,5 +53,11 @@ export class ProfileService {
 
   unlikeRecipe(operation: LikedRecipeOperation): Observable<any> {
     return this.http.post(`${this.apiUrl}/UnlikeRecipe`, operation);
+  }
+
+  getUserProfilePicture(username: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${username}/profilePic`, {
+      responseType: 'text',
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service'; // Ensure the path is correct
 import { ProfileService } from '../services/profile.service';
@@ -14,8 +14,7 @@ export class NavBarComponent implements OnInit {
   isMobileMenuOpen = false;
   isProfileDropdownOpen = false;
   isAdmin = false;
-  username: string | null = null;
-  profilePictureURL: string | null = null;
+  profilePicture: string | null = null;
   isNavVisible = true;
   lastScrollTop = 0;
 
@@ -23,24 +22,29 @@ export class NavBarComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private profileService: ProfileService,
-  ) {}
+  ) {
+    effect(() => {
+      this.profilePicture = this.profileService.profilePicture();
+    });
+  }
 
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdmin();
-    this.username = this.authService.getCurrentUsername();
-    if (this.username) {
-      this.profileService.getUserProfilePicture(this.username).subscribe(
-        (profilePictureURL) => {
-          this.profilePictureURL = profilePictureURL;
+    const username = this.authService.getCurrentUsername();
+    if (username) {
+      this.profileService.getUserProfilePicture(username).subscribe(
+        (urlString) => {
+          try {
+            this.profileService.profilePicture.set(urlString);
+          } catch (e) {
+            console.error('Error processing profile picture URL:', e);
+          }
         },
         (error) => {
           console.error('Error fetching profile picture:', error);
         },
       );
     }
-    this.profileService.profilePicture$.subscribe((url) => {
-      this.profilePictureURL = url;
-    });
   }
 
   toggleMobileMenu(event: MouseEvent): void {

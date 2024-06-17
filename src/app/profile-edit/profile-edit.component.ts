@@ -26,7 +26,8 @@ export class ProfileEditComponent implements OnInit {
   };
   username: string | null = null;
   errorMessage: string | null = null;
-  imageUrl: string = '';
+  backupUrl: string = '';
+  submit = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +47,7 @@ export class ProfileEditComponent implements OnInit {
           if (this.profile.dateOfBirth) {
             const date = new Date(this.profile.dateOfBirth);
             this.profile.dateOfBirth = date.toISOString().substring(0, 10);
+            this.backupUrl = this.profile.profilePicture;
           }
         },
         (error) => {
@@ -78,14 +80,16 @@ export class ProfileEditComponent implements OnInit {
     if (input?.files?.[0]) {
       const file = input.files[0];
       this.cloudinaryService.uploadImage(file).subscribe((response: any) => {
-        this.imageUrl = response.secure_url;
-        this.profile.profilePicture = this.imageUrl;
-        this.onProfilePictureChange(this.imageUrl);
+        const cloudinaryImage = response.secure_url;
+        this.profile.profilePicture = cloudinaryImage;
+        this.onProfilePictureChange(cloudinaryImage);
       });
     }
   }
 
   onSubmit(): void {
+    this.submit = true;
+
     if (!this.validateDateOfBirth(this.profile.dateOfBirth)) {
       return;
     }
@@ -105,5 +109,9 @@ export class ProfileEditComponent implements OnInit {
 
   onCancel(): void {
     this.router.navigate(['/profile', this.username]);
+  }
+
+  ngOnDestroy(): void {
+    if (!this.submit) this.profileService.updateProfilePicture(this.backupUrl);
   }
 }
