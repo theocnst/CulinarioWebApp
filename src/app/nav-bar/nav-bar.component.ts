@@ -2,10 +2,12 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service'; // Ensure the path is correct
 import { ProfileService } from '../services/profile.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './nav-bar.component.html',
 })
 export class NavBarComponent implements OnInit {
@@ -14,6 +16,8 @@ export class NavBarComponent implements OnInit {
   isAdmin = false;
   username: string | null = null;
   profilePictureURL: string | null = null;
+  isNavVisible = true;
+  lastScrollTop = 0;
 
   constructor(
     private router: Router,
@@ -64,6 +68,17 @@ export class NavBarComponent implements OnInit {
   handleOutsideClick(event: MouseEvent): void {
     console.log('Handling outside click');
     this.closeAllDropdowns(event);
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll(): void {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    if (scrollTop > this.lastScrollTop) {
+      this.isNavVisible = false;
+    } else {
+      this.isNavVisible = true;
+    }
+    this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
   }
 
   onSearchClick(): void {
