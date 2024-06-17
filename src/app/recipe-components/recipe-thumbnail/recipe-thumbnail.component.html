@@ -2,10 +2,12 @@
   class="mx-auto max-w-xs cursor-pointer overflow-hidden rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl"
   (click)="navigateToRecipe()"
 >
-  <div class="flex h-48 w-full items-center justify-center bg-white">
+  <div
+    class="flex h-80 w-full items-center justify-center rounded-lg bg-white sm:h-64 md:h-56 lg:h-48"
+  >
     @if (recipe.image) {
       <img
-        class="h-full w-auto rounded-t-lg object-contain"
+        class="h-full w-auto rounded-lg object-contain"
         [src]="recipe.image"
         alt="Recipe Image"
       />
