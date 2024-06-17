@@ -20,6 +20,7 @@ export class ProfileComponent implements OnInit {
   likedRecipeDetails: { [key: number]: Recipe } = {};
   starArray: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   isFriend: boolean = false;
+  isLoading: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -45,6 +46,7 @@ export class ProfileComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error loading logged-in user profile', err);
+          this.isLoading = false;
         },
       });
     }
@@ -54,6 +56,7 @@ export class ProfileComponent implements OnInit {
     this.profileService.getUserProfile(username).subscribe({
       next: (data) => {
         this.userInfo = data;
+        this.isLoading = false;
         if (this.userInfo && this.userInfo.dateOfBirth) {
           this.userInfo.dateOfBirth = this.formatDate(
             this.userInfo.dateOfBirth,
@@ -65,6 +68,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading user profile', err);
+        this.isLoading = false;
       },
     });
   }

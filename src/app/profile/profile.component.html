@@ -1,7 +1,11 @@
 <div
-  class="mx-auto mb-10 mt-5 max-w-2xl overflow-hidden rounded-lg bg-white p-6 shadow-lg"
+  class="mx-auto mb-10 mt-20 max-w-2xl overflow-hidden rounded-lg bg-white p-6 shadow-lg"
 >
-  @if (userInfo) {
+  @if (isLoading) {
+    <div class="text-center">
+      <p class="text-lg text-gray-600">Loading profile...</p>
+    </div>
+  } @else if (userInfo) {
     <div class="flex justify-between">
       @if (userInfo.username !== loggedInUsername) {
         @if (isFriend) {
@@ -32,7 +36,6 @@
       <h2 class="mb-4 text-3xl font-extrabold text-orange-600">
         {{ userInfo.username }}'s Profile
       </h2>
-
       <div class="px-6 text-left">
         <p class="mb-2 text-lg">
           <span class="font-semibold text-gray-700">Name:</span>
@@ -83,7 +86,7 @@
                   </div>
                 }
               </div>
-              <div class="hidden shrink-0 sm:flex sm:items-end sm:text-right">
+              <div class="flex items-center">
                 <p class="text-sm leading-6 text-gray-900">
                   {{ friend.username }}
                 </p>
@@ -124,9 +127,7 @@
                   </div>
                 </div>
                 @if (likedRecipeDetails[recipe.recipeId]) {
-                  <div
-                    class="hidden shrink-0 sm:flex sm:flex-col sm:items-end sm:text-right"
-                  >
+                  <div class="flex flex-col items-end text-right">
                     <div class="flex items-center">
                       <span class="text-yellow-500">
                         @for (star of starArray; track star) {
@@ -152,13 +153,11 @@
                           </svg>
                         }
                       </span>
-                      <span class="text-md ml-2 font-semibold text-gray-600">
-                        {{
-                          likedRecipeDetails[
-                            recipe.recipeId
-                          ].averageRating?.toFixed(1) || 0
-                        }}
-                      </span>
+                      <span class="text-md ml-2 font-semibold text-gray-600">{{
+                        likedRecipeDetails[
+                          recipe.recipeId
+                        ].averageRating?.toFixed(1) || 0
+                      }}</span>
                     </div>
                     <p class="text-sm leading-6 text-gray-900">
                       Votes:
@@ -172,10 +171,9 @@
         </ul>
       </div>
     </div>
-  }
-  @if (!userInfo) {
+  } @else if (!userInfo) {
     <div class="text-center">
-      <p class="text-lg text-gray-600">Loading profile...</p>
+      <p class="text-lg text-gray-600">Profile does not exist.</p>
     </div>
   }
 </div>
