@@ -75,6 +75,7 @@ export class NavBarComponent implements OnInit {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     if (scrollTop > this.lastScrollTop) {
       this.isNavVisible = false;
+      this.isMobileMenuOpen = false;
     } else {
       this.isNavVisible = true;
     }
