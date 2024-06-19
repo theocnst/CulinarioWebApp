@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavBarComponent } from './nav-bar/nav-bar.component';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './core/services/user/auth.service';
+import { NavBarComponent } from './shared/nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-root',

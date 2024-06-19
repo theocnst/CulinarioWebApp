@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { authGuard } from './guards/auth.guard';
-import { noAuthGuard } from './guards/no-auth.guard';
-import { ProfileComponent } from './profile/profile.component';
-import { RecipeComponent } from './recipe-components/recipe/recipe.component';
-import { RecipeFormComponent } from './recipe-components/recipe-form/recipe-form.component';
-import { adminGuard } from './guards/admin.guard';
-import { RecipeListComponent } from './recipe-components/recipe-list/recipe-list.component';
-import { ProfileEditComponent } from './profile-edit/profile-edit.component';
-import { RecipeSearchComponent } from './recipe-components/recipe-search/recipe-search.component';
+import { adminGuard } from './core/guards/admin.guard';
+import { authGuard } from './core/guards/auth.guard';
+import { noAuthGuard } from './core/guards/no-auth.guard';
+import { LoginComponent } from './pages/auth/login/login.component';
+import { RegisterComponent } from './pages/auth/register/register.component';
+import { RecipeFormComponent } from './pages/recipe/recipe-form/recipe-form.component';
+import { RecipeListComponent } from './pages/recipe/recipe-list/recipe-list.component';
+import { RecipeSearchComponent } from './pages/recipe/recipe-search/recipe-search.component';
+import { ProfileEditComponent } from './pages/user/profile-edit/profile-edit.component';
+import { ProfileComponent } from './pages/user/profile/profile.component';
+import { RecipeViewComponent } from './pages/recipe/recipe-view/recipe-view.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [noAuthGuard] },
@@ -40,7 +40,7 @@ export const routes: Routes = [
   },
   {
     path: 'recipe/:id',
-    component: RecipeComponent,
+    component: RecipeViewComponent,
     canActivate: [authGuard],
   },
   {

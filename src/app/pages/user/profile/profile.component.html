@@ -1,0 +1,181 @@
+<div
+  class="mx-auto mb-10 mt-20 max-w-2xl overflow-hidden rounded-lg bg-white p-6 shadow-lg"
+>
+  @if (isLoading()) {
+    <div class="text-center">
+      <p class="text-lg text-gray-600">Loading profile...</p>
+    </div>
+  } @else if (userInfo()) {
+    <div class="flex justify-between">
+      @if (userInfo()?.username !== loggedInUsername()) {
+        @if (isFriend()) {
+          <button
+            class="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-700"
+            (click)="removeFriend()"
+          >
+            Remove Friend
+          </button>
+        } @else {
+          <button
+            class="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-700"
+            (click)="addFriend()"
+          >
+            Add Friend
+          </button>
+        }
+      }
+    </div>
+    <div class="text-center">
+      <div class="relative inline-block">
+        <img
+          src="{{ userInfo()?.profilePicture }}"
+          alt="Profile Picture"
+          class="mx-auto mb-4 h-32 w-32 rounded-full border-4 border-orange-500 object-cover"
+        />
+      </div>
+      <h2 class="mb-4 text-3xl font-extrabold text-orange-600">
+        {{ userInfo()?.username }}'s Profile
+      </h2>
+      <div class="px-6 text-left">
+        <p class="mb-2 text-lg">
+          <span class="font-semibold text-gray-700">Name:</span>
+          {{ userInfo()?.firstName }} {{ userInfo()?.lastName }}
+        </p>
+        <p class="mb-2 text-lg">
+          <span class="font-semibold text-gray-700">Description:</span>
+        </p>
+        <p class="mb-2 text-lg">
+          <span class="ml-5 text-gray-700">{{ userInfo()?.description }}</span>
+        </p>
+        <p class="mb-2 text-right text-lg">
+          <span class="font-semibold text-gray-700">Date of Birth:</span>
+          {{ userInfo()?.dateOfBirth }}
+        </p>
+      </div>
+      <div class="mt-6 border-t-2 border-orange-200 px-6 text-left">
+        <h3 class="mb-2 text-2xl font-semibold text-orange-600">Follows:</h3>
+        <ul class="cursor-pointer divide-y divide-gray-100">
+          @for (friend of userInfo()?.friends; track friend) {
+            <li
+              class="flex justify-between gap-x-6 py-5"
+              (click)="navigateToProfile(friend.username)"
+            >
+              <div class="flex min-w-0 gap-x-4">
+                @if (friendDetails()[friend.username]) {
+                  <img
+                    class="h-12 w-12 flex-none rounded-full bg-gray-50 object-cover"
+                    src="{{ friendDetails()[friend.username].profilePicture }}"
+                    alt=""
+                  />
+                  <div class="min-w-0 flex-auto">
+                    <p class="text-lg font-semibold leading-6 text-gray-900">
+                      {{ friendDetails()[friend.username].firstName }}
+                      {{ friendDetails()[friend.username].lastName }}
+                    </p>
+                  </div>
+                } @else {
+                  <img
+                    class="h-12 w-12 flex-none rounded-full bg-gray-50"
+                    src="https://via.placeholder.com/150"
+                    alt="Profile Picture Placeholder"
+                  />
+                  <div class="min-w-0 flex-auto">
+                    <p class="text-sm font-semibold leading-6 text-gray-900">
+                      {{ friend.username }}
+                    </p>
+                  </div>
+                }
+              </div>
+              <div class="flex items-center">
+                <p class="text-sm leading-6 text-gray-900">
+                  {{ friend.username }}
+                </p>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="mt-6 border-t-2 border-orange-200 px-6 text-left">
+        <h3 class="mb-2 text-2xl font-semibold text-orange-600">
+          Liked Recipes
+        </h3>
+        <ul class="divide-y divide-gray-100">
+          @for (recipe of userInfo()?.likedRecipes; track recipe) {
+            @if (likedRecipeDetails()[recipe.recipeId].recipeId; as recipeId) {
+              <li
+                class="flex cursor-pointer justify-between gap-x-6 py-5"
+                (click)="navigateToRecipe(recipeId)"
+              >
+                <div class="flex min-w-0 gap-x-4">
+                  @if (likedRecipeDetails()[recipe.recipeId].image) {
+                    <img
+                      class="h-12 w-12 flex-none rounded-full bg-gray-50 object-cover"
+                      [src]="likedRecipeDetails()[recipe.recipeId].image"
+                      alt=""
+                    />
+                  } @else {
+                    <img
+                      class="h-12 w-12 flex-none rounded-full bg-gray-50"
+                      src="https://via.placeholder.com/150"
+                      alt="Recipe Image Placeholder"
+                    />
+                  }
+                  <div class="min-w-0 flex-auto">
+                    <p class="text-lg font-semibold leading-6 text-gray-900">
+                      {{ likedRecipeDetails()[recipe.recipeId].name }}
+                    </p>
+                  </div>
+                </div>
+                @if (likedRecipeDetails()[recipe.recipeId]) {
+                  <div class="flex flex-col items-end text-right">
+                    <div class="flex items-center">
+                      <span class="text-yellow-500">
+                        @for (star of starArray; track star) {
+                          <svg
+                            class="inline-block h-4 w-4"
+                            [attr.fill]="
+                              getStarFill(
+                                star,
+                                likedRecipeDetails()[recipe.recipeId]
+                                  .averageRating ?? 0
+                              )
+                            "
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M12 2.5l3.094 6.26 6.906 1.004-5 4.864 1.18 6.882L12 17.727l-6.18 3.254L7 14.628 2 9.764l6.906-1.004L12 2.5z"
+                            />
+                          </svg>
+                        }
+                      </span>
+                      <span class="text-md ml-2 font-semibold text-gray-600">{{
+                        likedRecipeDetails()[
+                          recipe.recipeId
+                        ].averageRating?.toFixed(1) || 0
+                      }}</span>
+                    </div>
+                    <p class="text-sm leading-6 text-gray-900">
+                      Votes:
+                      {{
+                        likedRecipeDetails()[recipe.recipeId].numberOfRatings
+                      }}
+                    </p>
+                  </div>
+                }
+              </li>
+            }
+          }
+        </ul>
+      </div>
+    </div>
+  } @else if (!userInfo) {
+    <div class="text-center">
+      <p class="text-lg text-gray-600">Profile does not exist.</p>
+    </div>
+  }
+</div>
