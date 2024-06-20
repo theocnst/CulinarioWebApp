@@ -31,17 +31,17 @@ export class CommentAddComponent {
         recipeId: this.recipeId,
         note: this.note.trim(),
       };
-      this.commentService.addComment(newComment).subscribe(
-        () => {
+      this.commentService.addComment(newComment).subscribe({
+        next: () => {
           this.note = '';
           console.log('Comment posted successfully');
           this.refreshComments.emit();
         },
-        (error) => {
+        error: (error) => {
           console.error('Error posting comment:', error);
           this.errorMessage = 'Error posting comment';
         },
-      );
+      });
     } else {
       this.errorMessage = 'Comment cannot be empty';
     }

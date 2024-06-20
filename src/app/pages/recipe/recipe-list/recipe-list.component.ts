@@ -20,13 +20,13 @@ export class RecipeListComponent implements OnInit {
   }
 
   fetchRecipes(): void {
-    this.recipeService.getRecipes().subscribe(
-      (data: Recipe[]) => {
+    this.recipeService.getRecipes().subscribe({
+      next: (data: Recipe[]) => {
         this.recipes = data;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error fetching recipes:', error);
       },
-    );
+    });
   }
 }
