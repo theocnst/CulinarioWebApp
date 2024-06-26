@@ -10,6 +10,7 @@ export class ConfigService {
   constructor(private http: HttpClient) {
     //local api
     //this.apiUrl = 'https://localhost:7053/api';
+
     //production api
     this.apiUrl = 'https://culinarioapi.azurewebsites.net/api';
   }

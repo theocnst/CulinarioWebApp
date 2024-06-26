@@ -110,16 +110,25 @@ export class RecipeFormComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input?.files?.[0]) {
       const file = input.files[0];
-      this.cloudinaryService.uploadImage(file).subscribe(
-        (response: any) => {
+
+      // Check if the file type is an image
+      if (!file.type.match('image.*')) {
+        console.error('Invalid file type:', file.type);
+        this.errorMessage =
+          'Only image files are accepted. Please select an image file.';
+        return;
+      }
+
+      this.cloudinaryService.uploadImage(file).subscribe({
+        next: (response: any) => {
           this.imageUrl = response.secure_url;
           this.recipe.image = this.imageUrl;
         },
-        (error) => {
+        error: (error) => {
           console.error('Error uploading image:', error);
           this.errorMessage = 'Error uploading image';
         },
-      );
+      });
     }
   }
 

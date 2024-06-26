@@ -79,11 +79,18 @@ export class ProfileEditComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input?.files?.[0]) {
       const file = input.files[0];
-      this.cloudinaryService.uploadImage(file).subscribe((response: any) => {
-        const cloudinaryImage = response.secure_url;
-        this.profile.profilePicture = cloudinaryImage;
-        this.onProfilePictureChange(cloudinaryImage);
-      });
+
+      // Check if the file type is an image
+      if (file.type.match('image.*')) {
+        this.cloudinaryService.uploadImage(file).subscribe((response: any) => {
+          const cloudinaryImage = response.secure_url;
+          this.profile.profilePicture = cloudinaryImage;
+          this.onProfilePictureChange(cloudinaryImage);
+        });
+      } else {
+        // Optionally alert the user that only image files are allowed
+        alert('Only image files are accepted. Please select an image file.');
+      }
     }
   }
 

@@ -9,6 +9,7 @@ export class RecipeValidationService {
 
   validateCurrentStep(recipe: Recipe, currentStep: number): boolean {
     this.errorMessage = '';
+    console.log('recipe', recipe);
 
     switch (currentStep) {
       case 1:
@@ -18,24 +19,43 @@ export class RecipeValidationService {
           !recipe.description ||
           !recipe.countryName ||
           !recipe.recipeType.name ||
-          !recipe.servings ||
-          !recipe.prepTime ||
-          !recipe.cookTime ||
-          !recipe.totalTime
+          recipe.servings === null ||
+          recipe.servings === undefined ||
+          recipe.servings <= 0 ||
+          recipe.prepTime === null ||
+          recipe.prepTime === undefined ||
+          recipe.prepTime < 0 ||
+          recipe.cookTime === null ||
+          recipe.cookTime === undefined ||
+          recipe.cookTime < 0 ||
+          recipe.totalTime === null ||
+          recipe.totalTime === undefined ||
+          recipe.totalTime <= 0
         ) {
           this.errorMessage =
             'Please fill out all required fields in Step 1.<br>';
-          if (!Number.isInteger(recipe.servings)) {
-            this.errorMessage += ' Servings must be an integer.';
+          console.log('Validation failed for step 1', {
+            name: recipe.name,
+            image: recipe.image,
+            description: recipe.description,
+            countryName: recipe.countryName,
+            recipeType: recipe.recipeType.name,
+            servings: recipe.servings,
+            prepTime: recipe.prepTime,
+            cookTime: recipe.cookTime,
+            totalTime: recipe.totalTime,
+          });
+          if (!Number.isInteger(recipe.servings) || recipe.servings <= 0) {
+            this.errorMessage += ' Servings must be a positive integer.';
           }
-          if (!Number.isInteger(recipe.prepTime)) {
-            this.errorMessage += ' Prep time must be an integer.';
+          if (!Number.isInteger(recipe.prepTime) || recipe.prepTime < 0) {
+            this.errorMessage += ' Prep time must be a non-negative integer.';
           }
-          if (!Number.isInteger(recipe.cookTime)) {
-            this.errorMessage += ' Cook time must be an integer.';
+          if (!Number.isInteger(recipe.cookTime) || recipe.cookTime < 0) {
+            this.errorMessage += ' Cook time must be a non-negative integer.';
           }
-          if (!Number.isInteger(recipe.totalTime)) {
-            this.errorMessage += ' Total time must be an integer.';
+          if (!Number.isInteger(recipe.totalTime) || recipe.totalTime <= 0) {
+            this.errorMessage += ' Total time must be a positive integer.';
           }
           return false;
         }
@@ -49,10 +69,11 @@ export class RecipeValidationService {
           if (
             !ingredient.name ||
             !ingredient.unit ||
-            !Number.isInteger(ingredient.quantity)
+            !Number.isInteger(ingredient.quantity) ||
+            ingredient.quantity <= 0
           ) {
             this.errorMessage =
-              'Please fill out all ingredient fields with valid values.';
+              'Please fill out all ingredient fields with valid values. Quantity must be a positive integer.';
             return false;
           }
         }
@@ -72,14 +93,20 @@ export class RecipeValidationService {
       case 4:
         if (
           !Number.isInteger(recipe.nutritionInfo.calories) ||
+          recipe.nutritionInfo.calories <= 0 ||
           !Number.isInteger(recipe.nutritionInfo.fats) ||
+          recipe.nutritionInfo.fats <= 0 ||
           !Number.isInteger(recipe.nutritionInfo.carbs) ||
+          recipe.nutritionInfo.carbs <= 0 ||
           !Number.isInteger(recipe.nutritionInfo.protein) ||
+          recipe.nutritionInfo.protein <= 0 ||
           !Number.isInteger(recipe.nutritionInfo.fiber) ||
-          !Number.isInteger(recipe.nutritionInfo.sugar)
+          recipe.nutritionInfo.fiber <= 0 ||
+          !Number.isInteger(recipe.nutritionInfo.sugar) ||
+          recipe.nutritionInfo.sugar <= 0
         ) {
           this.errorMessage =
-            'Please enter valid integer values for nutrition information.';
+            'Please enter valid positive integer values for nutrition information.';
           return false;
         }
         break;
